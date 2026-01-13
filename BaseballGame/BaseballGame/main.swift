@@ -4,8 +4,6 @@
 //
 //  Created by 변예린 on 1/13/26.
 //
+var game = BaseballGame()
 
-import Foundation
-
-print("Hello, World!")
-
+game.start()
