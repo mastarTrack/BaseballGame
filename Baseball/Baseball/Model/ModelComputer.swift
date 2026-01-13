@@ -5,7 +5,7 @@
 //  Created by Hanjuheon on 1/13/26.
 //
 
-// 컴퓨터 모델 클래스
+/// 컴퓨터 모델 클래스
 class Computer{
     private var baseballNumber: [Int] = []
     

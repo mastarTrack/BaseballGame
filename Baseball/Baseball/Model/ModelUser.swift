@@ -5,7 +5,7 @@
 //  Created by Hanjuheon on 1/13/26.
 //
 
-// 유저 모델 클래스
+/// 유저 모델 클래스
 class User{
     private var name: String
     private var baseballNumber: [Int] = []
