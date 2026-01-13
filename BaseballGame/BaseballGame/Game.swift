@@ -16,8 +16,9 @@ class BaseballGame {
     
     // 게임 시작 함수
     func play() {
-        setAnswer()
+        setAnswer() // 정답 생성
         
+        // 정답을 맞힐 때까지 반복
         while !isCorrect {
             getUserAnswer()
             checkAnswer()
@@ -27,7 +28,16 @@ class BaseballGame {
     // 정답 생성 함수
     func setAnswer() {
         for _ in 0...2 {
-            answer.append(Int.random(in: 1...9))
+            if !answer.isEmpty {
+                var num = Int.random(in: 1...9)
+                
+                while answer.contains(num) { // 정답에 포함되어있다면 num 재생성
+                    num = Int.random(in: 1...9)
+                }
+                answer.append(num)
+            } else {
+                answer.append(Int.random(in: 1...9))
+            }
         }
         print("정답: \(answer)")
     }
