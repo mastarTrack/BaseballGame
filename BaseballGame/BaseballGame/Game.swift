@@ -7,27 +7,73 @@
 
 import Foundation
 
-// struct로 할건지 class로 할건지?
-// 2. Lv2 `01/14 까지`
-//- [ ]  정답을 맞추기 위해 3자리수를 입력하고 힌트를 받습니다
-//    - [ ]  힌트는 야구용어인 **볼**과 **스트라이크**입니다.
-//    - [ ]  같은 자리에 같은 숫자가 있는 경우 **스트라이크**, 다른 자리에 숫자가 있는 경우 **볼**입니다
-//    - ex) 정답 : 456 인 경우
-//        - 435를 입력한 경우 → 1스트라이크 1볼
-//        - 357를 입력한 경우 → 1스트라이크
-//        - 678를 입력한 경우 → 1볼
-//        - 123를 입력한 경우 → Nothing
-//    - 만약 올바르지 않은 입력값에 대해서는 오류 문구를 보여주세요
-//- 3자리 숫자가 정답과 같은 경우 게임이 종료됩니다
-
-
 class BaseballGame {
     var answer: [Int] = []
+    var userAnswer: [Int] = []
+    
+    var isCorrect = false
+    var hint: (strike: Int, ball: Int) = (0, 0)
+    
+    // 게임 시작 함수
+    func play() {
+        setAnswer()
+        
+        while !isCorrect {
+            getUserAnswer()
+            checkAnswer()
+        }
+    }
     
     // 정답 생성 함수
     func setAnswer() {
         for _ in 0...2 {
             answer.append(Int.random(in: 1...9))
+        }
+        print("정답: \(answer)")
+    }
+    
+    // 유저 정답 입력 함수
+    func getUserAnswer() {
+        print("3자리 숫자를 입력해주세요. (예: 123)")
+        
+        guard let input = readLine() else { return } // 유저 입력
+        let stringNum = input.replacingOccurrences(of: " ", with: "") // 공백 삭제
+        
+        userAnswer = stringNum.compactMap{ Int(String($0)) } // 유저 입력 배열
+        
+        // 유저 입력이 3자리 숫자가 아닐 경우의 예외 처리
+        guard userAnswer.count == 3 else {
+            print("유효하지 않은 입력입니다!")
+            return
+        }
+    }
+    
+    // 정답 & 유저 입력 비교 함수
+    func checkAnswer() {
+        // 힌트 초기화
+        hint.strike = 0
+        hint.ball = 0
+        
+        // 오류 시 무시
+        guard userAnswer.count == 3 else { return }
+        
+        // 스트라이크, 볼 확인
+        userAnswer.enumerated().forEach {
+            if answer[$0.offset] == $0.element {
+                hint.strike += 1
+            } else if answer.contains($0.element) {
+                hint.ball += 1
+            }
+        }
+        
+        // 힌트에 따른 분기 처리
+        if hint.strike == 3 {
+            isCorrect = true
+            print("정답입니다!")
+        } else if hint.strike == 0 && hint.ball == 0 {
+            print("Nothing")
+        } else {
+            print("\(hint.strike) 스트라이크 \(hint.ball) 볼 입니다!")
         }
     }
 }

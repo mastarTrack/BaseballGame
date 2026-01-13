@@ -6,5 +6,4 @@
 //
 var game = BaseballGame()
 
-game.setAnswer()
-print(game.answer)
+game.play()
