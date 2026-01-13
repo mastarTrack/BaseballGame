@@ -8,13 +8,15 @@
 import Foundation
 
 class BaseballGame {
+    
+    var recordManager = RecordManager() // 기록을 관리하는 인스턴스 생성
+    var appending = 0
+    
     func start() {
-        let answer = makeAnswer() // 정답 만드는 함수
-        print("환영합니다! 원하시는 번호를 입력해주세요")
-        print("1. 게임 시작하기 2. 게임 기록 보기 3. 종료하기")
-        
         while true {
-            // 1. 유저에게 입력값 받기
+            let answer = makeAnswer() // 정답 만드는 함수
+            print("환영합니다! 원하시는 번호를 입력해주세요")
+            print("1. 게임 시작하기 2. 게임 기록 보기 3. 종료하기")
             let input = readLine()
             switch input {
             case "1":
@@ -29,11 +31,14 @@ class BaseballGame {
                     }
                     
                     if compareInput(inputNumber, answer) == false { // 정답이면 false 출력하고 반복문에서 빠져나감
+                        recordManager.add(appending) // 배열에 시도 횟수 입력
+                        appending = 0 // appending 0으로 초기화
                         break
                     }
                 }
             case "2":
-                print("게임 기록 보기")
+                print("<게임 기록 보기>")
+                recordManager.showRecords() // showRecords 함수 호출
             case "3":
                 print("게임을 종료합니다.")
                 break
@@ -52,6 +57,8 @@ class BaseballGame {
         checkNum -= b * 10
         
         let c = checkNum
+        
+        appending += 1 // 시도횟수 1 증가
         
         if a != b && b != c && c != a && 99 < inputNumber && inputNumber < 1000 {
             return true
@@ -102,7 +109,6 @@ class BaseballGame {
     }
     
     
-    // LV. 1
     // 1에서 9까지의 서로 다른 임의의 정답인 수 3개를 정하기 (abc)
     func makeAnswer() -> Array<Int> {
                 
@@ -119,6 +125,7 @@ class BaseballGame {
         }
         
         let answer: Array = [a, b, c]
+        print(answer)
         return answer
     }
 }
