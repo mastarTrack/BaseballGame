@@ -78,8 +78,8 @@ class BaseballGame {
         
         // 정답을 맞힐 때까지 반복
         while !isCorrect {
-                getUserAnswer()
-                checkAnswer()
+            getUserAnswer()
+            checkAnswer()
         }
     }
     
@@ -90,21 +90,18 @@ class BaseballGame {
         answer = []
         
         for _ in 0...2 {
-            var num = Int.random(in: 0...9)
-            
             // 정답 첫 번째 숫자일 경우
             if answer.isEmpty {
-                // num == 0이라면 재생성
-                while num == 0 {
-                    num = Int.random(in: 0...9)
-                }
+                let num = Int.random(in: 1...9)
+                answer.append(num)
             } else {
+                var num = Int.random(in: 0...9)
                 // 정답에 포함되어있다면 num 재생성
                 while answer.contains(num) {
                     num = Int.random(in: 0...9)
                 }
+                answer.append(num)
             }
-            answer.append(num)
         }
         print("정답: \(answer)")
     }
