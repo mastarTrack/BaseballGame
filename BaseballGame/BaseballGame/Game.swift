@@ -26,7 +26,7 @@ class BaseballGame {
             } catch GameError.invalidInput {
                 print("유효하지 않은 입력입니다!")
             } catch {
-                print("정의되지 않은 오류입니다.")
+                print("알 수 없는 오류입니다.")
             }
         }
     }

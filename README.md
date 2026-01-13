@@ -40,8 +40,17 @@ enum GameError {
 }
 ```
 
-이후 함수 호출부에서 do-catch문으로 에러를 핸들링했으나 `GameError`에 정의된 에러 케이스를 모두 포함하였는데도 오류가 발생하였다.
+이후 함수 호출부에서 do-catch문으로 에러를 핸들링했으나 `GameError`에 정의된 에러 케이스를 모두 포함하였는데도 아래와 같은 오류가 발생하였다.
 
 'Errors thrown from here are not handled because the enclosing catch is not exhaustive'
 
 <img width="2158" height="436" alt="Image" src="https://github.com/user-attachments/assets/601ca043-fd3b-4fad-892c-a2430b9ae121" />
+
+찾아보니 스위프트는 `throws`가 포함된 함수라면 '에러'를 던지는 것만 알지, 어떠한 에러를 던질지는 모른다고 한다.
+
+따라서 `GameError`뿐만 아니라 (가능성은 매우 낮으나) 던져질 수 있는 정의되지 않은 다른 에러에 대해서도 처리를 해주어야 한다고 한다.
+
+```swift
+catch { 
+    print("정의되지 않은 에러입니다."
+}
