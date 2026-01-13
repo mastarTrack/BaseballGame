@@ -95,14 +95,14 @@ class BaseballGame {
                 
         let a = Int.random(in: (1...9))
         
-        var b = Int.random(in: 1...9)
+        var b = Int.random(in: 0...9)
         while a == b {
-            b = Int.random(in: 1...9) // a와 b가 다를때까지 b에 랜덤한 Int값 대입
+            b = Int.random(in: 0...9) // a와 b가 다를때까지 b에 랜덤한 Int값 대입
         }
         
-        var c = Int.random(in: 1...9)
+        var c = Int.random(in: 0...9)
         while a == c || b == c {
-            c = Int.random(in: 1...9) // c가 a, b값과 다를때까지 c에 랜덤한 Int값 대입
+            c = Int.random(in: 0...9) // c가 a, b값과 다를때까지 c에 랜덤한 Int값 대입
         }
         
         let answer: Array = [a, b, c]
