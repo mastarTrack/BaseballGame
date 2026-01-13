@@ -7,10 +7,6 @@
 
 import Foundation
 
-enum GameError: Error {
-    case invalidInput
-}
-
 enum Menu {
     case play, record, exit
 }

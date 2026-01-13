@@ -14,17 +14,19 @@ class BaseballGame {
     var answer: [Int] = []
     var userAnswer: [Int] = []
     
-    var gameRecord: [Int: Int] = [:]
+    var gameRecord: [Int] = []
     var gameCount = 0
     
-    //게임 시작 함수
+    //MARK: 게임 시작 함수
     func start() {
+        isExit = false
         while !isExit {
             guard let selected = selectMenu() else {
                 print("유효하지 않은 입력입니다!")
                 return
             }
             
+            // 입력 번호에 따른 함수 실행
             switch selected {
             case .play:
                 play()
@@ -34,6 +36,7 @@ class BaseballGame {
                 isExit = true
             }
         }
+        exit()
     }
     
     // 메뉴 선택 함수
@@ -64,22 +67,23 @@ class BaseballGame {
         case "2":
             return .record
         case "3":
-            return .exit
+            return .exit 
         default:
             return nil
         }
     }
     
-    // 게임 플레이 함수
+    //MARK: 게임 플레이 함수
     func play() {
-        print("\n❮게임을 시작합니다.❯")
+        print("\n❮ 게임을 시작합니다. ❯")
+        gameRecord.append(0)
         setAnswer() // 정답 생성
         
         // 정답을 맞힐 때까지 반복
         while !isCorrect {
             getUserAnswer()
             checkAnswer()
-            gameRecord[gameCount, default: 0] += 1 // 시도 횟수 증가
+            gameRecord[gameCount] += 1 // 시도 횟수 증가
         }
         
         gameCount += 1 // 게임 횟수 증가
@@ -153,15 +157,30 @@ class BaseballGame {
         }
     }
     
+    //MARK: 게임 기록 조회 함수
     func record() {
         print("❮게임 기록 보기❯\n")
+        
+        // 게임 기록이 없을 경우
         guard !gameRecord.isEmpty else {
             print("플레이한 게임 기록이 없습니다!\n")
             return
         }
-        
-        for record in gameRecord.sorted(by: { $0.key < $1.key }) {
-            print("\(record.key + 1)번째 게임 : 시도 횟수 - \(record.value)")
+
+        // 게임 기록 출력
+        for i in 0..<gameRecord.count {
+            print("\(i + 1)번째 게임: 시도 횟수 - \(gameRecord[i])")
         }
+        print("\n")
+    }
+    
+    //MARK: 게임 종료 함수
+    func exit() {
+        // 게임 기록 초기화
+        gameRecord = []
+        gameCount = 0
+        
+        print("❮ 숫자 야구 게임을 종료합니다. ❯")
+        
     }
 }

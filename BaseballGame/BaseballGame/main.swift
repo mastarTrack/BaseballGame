@@ -7,3 +7,5 @@
 var game = BaseballGame()
 
 game.start()
+
+game.start()
