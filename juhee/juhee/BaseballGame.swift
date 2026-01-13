@@ -10,7 +10,7 @@ import Foundation
 class BaseballGame {
     
     var recordManager = RecordManager() // 기록을 관리하는 인스턴스 생성
-    var appending = 0
+    var nthTrial = 0
     
     func start() {
         while true {
@@ -20,8 +20,9 @@ class BaseballGame {
             let input = readLine()
             switch input {
             case "1":
+                print("<게임을 시작합니다>")
                 while true {
-                    print("<게임을 시작합니다> \n숫자를 입력하세요")
+                    print("숫자를 입력하세요")
                     guard let inputNum = readLine(),
                           let inputNumber = Int(inputNum), // 숫자로 변환
                           checkInput(inputNumber) // 입력값 검사 함수 호출
@@ -31,8 +32,8 @@ class BaseballGame {
                     }
                     
                     if compareInput(inputNumber, answer) == false { // 정답이면 false 출력하고 반복문에서 빠져나감
-                        recordManager.add(appending) // 배열에 시도 횟수 입력
-                        appending = 0 // appending 0으로 초기화
+                        recordManager.add(nthTrial) // 배열에 시도 횟수 입력
+                        nthTrial = 0 // 시도 횟수 0으로 초기화
                         break
                     }
                 }
@@ -40,10 +41,10 @@ class BaseballGame {
                 print("<게임 기록 보기>")
                 recordManager.showRecords() // showRecords 함수 호출
             case "3":
-                print("게임을 종료합니다.")
-                break
+                print("< 숫자 야구 게임을 종료합니다. >")
+                exit(0) // 강제 종료 함수 출력
             default:
-                print("잘못된 값을 입력하였습니다. 번호를 다시 입력해주세요.")
+                print("올바른 숫자를 입력해주세요!")
             }
         }
     }
@@ -58,7 +59,7 @@ class BaseballGame {
         
         let c = checkNum
         
-        appending += 1 // 시도횟수 1 증가
+        nthTrial += 1 // 정답 맞추기 위한 시도 횟수 1 증가
         
         if a != b && b != c && c != a && 99 < inputNumber && inputNumber < 1000 {
             return true
@@ -102,7 +103,7 @@ class BaseballGame {
             print("Nothing")
             return true
         } else {
-            print("\(strike)스트라이크 \(ball)볼")
+            print("\(strike)스트라이크 \(ball)볼\n ")
             return true
         }
         
@@ -125,7 +126,6 @@ class BaseballGame {
         }
         
         let answer: Array = [a, b, c]
-        print(answer)
         return answer
     }
 }
