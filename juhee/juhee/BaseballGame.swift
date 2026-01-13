@@ -10,22 +10,35 @@ import Foundation
 class BaseballGame {
     func start() {
         let answer = makeAnswer() // 정답 만드는 함수
-        print("<게임을 시작합니다>")
+        print("환영합니다! 원하시는 번호를 입력해주세요")
+        print("1. 게임 시작하기 2. 게임 기록 보기 3. 종료하기")
         
         while true {
-            
             // 1. 유저에게 입력값 받기
-            print("숫자를 입력하세요")
-            guard let input = readLine(),
-                  let inputNumber = Int(input), // 숫자로 변환
-                checkInput(inputNumber) // 입력값 검사 함수 호출
-            else {
-                print("올바르지 않은 입력값입니다.")
-                continue // 다시 입력하도록 while문 다시 실행
-            }
-            
-            if compareInput(inputNumber, answer) == false { // 정답이면 false 출력하고 반복문에서 빠져나감
+            let input = readLine()
+            switch input {
+            case "1":
+                while true {
+                    print("<게임을 시작합니다> \n숫자를 입력하세요")
+                    guard let inputNum = readLine(),
+                          let inputNumber = Int(inputNum), // 숫자로 변환
+                          checkInput(inputNumber) // 입력값 검사 함수 호출
+                    else {
+                        print("올바르지 않은 입력값입니다.")
+                        continue // 다시 입력하도록 while문 다시 실행
+                    }
+                    
+                    if compareInput(inputNumber, answer) == false { // 정답이면 false 출력하고 반복문에서 빠져나감
+                        break
+                    }
+                }
+            case "2":
+                print("게임 기록 보기")
+            case "3":
+                print("게임을 종료합니다.")
                 break
+            default:
+                print("잘못된 값을 입력하였습니다. 번호를 다시 입력해주세요.")
             }
         }
     }
