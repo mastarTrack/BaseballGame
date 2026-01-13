@@ -14,13 +14,10 @@ class BaseballGame {
     var userAnswer: [Int] = []
     
     var isCorrect = false
-    var hint: (strike: Int, ball: Int) = (0, 0)
     
     //게임 시작 함수
     func start() {
         while !isExit {
-            isCorrect = false
-            
             guard let selected = selectMenu() else {
                 print("유효하지 않은 입력입니다!")
                 return
@@ -124,8 +121,7 @@ class BaseballGame {
     // 정답 & 유저 입력 비교 함수
     func checkAnswer() {
         // 힌트 초기화
-        hint.strike = 0
-        hint.ball = 0
+        var hint: (strike: Int, ball: Int) = (0, 0)
         
         // 유저 입력 정답 오류 시 무시
         guard userAnswer.count == 3 else {
