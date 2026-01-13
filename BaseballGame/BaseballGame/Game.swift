@@ -9,11 +9,13 @@ import Foundation
 
 class BaseballGame {
     var isExit = false
+    var isCorrect = false
     
     var answer: [Int] = []
     var userAnswer: [Int] = []
     
-    var isCorrect = false
+    var gameRecord: [Int: Int] = [:]
+    var gameCount = 0
     
     //게임 시작 함수
     func start() {
@@ -77,7 +79,10 @@ class BaseballGame {
         while !isCorrect {
             getUserAnswer()
             checkAnswer()
+            gameRecord[gameCount, default: 0] += 1 // 시도 횟수 증가
         }
+        
+        gameCount += 1 // 게임 횟수 증가
     }
     
     // 정답 생성 함수
@@ -115,7 +120,6 @@ class BaseballGame {
         
         // 유저 입력 배열
         userAnswer = stringNum.compactMap{ Int(String($0)) }
-        
     }
     
     // 정답 & 유저 입력 비교 함수
@@ -150,6 +154,14 @@ class BaseballGame {
     }
     
     func record() {
+        print("❮게임 기록 보기❯\n")
+        guard !gameRecord.isEmpty else {
+            print("플레이한 게임 기록이 없습니다!\n")
+            return
+        }
         
+        for record in gameRecord.sorted(by: { $0.key < $1.key }) {
+            print("\(record.key + 1)번째 게임 : 시도 횟수 - \(record.value)")
+        }
     }
 }
