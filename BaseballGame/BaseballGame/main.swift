@@ -6,4 +6,4 @@
 //
 var game = BaseballGame()
 
-game.play()
+game.start()
