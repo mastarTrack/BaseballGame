@@ -17,7 +17,7 @@ func play() -> Int {
         /* (Lv.2) 1. 정답 맞추기 + 힌트 받기 */
         print("숫자를 입력하세요: ", terminator: "\n")
         guard let input = readLine(),
-              let num = Optional(input.map{Int(String($0))}), //숫자 외의 다른 값이 들어왔는지 확인, map 대신 compactMap 사용 : map -> 이후 nil 처리 필요
+              let num = Optional(input.compactMap{Int(String($0))}), //숫자 외의 다른 값이 들어왔는지 확인, map 대신 compactMap 사용 : map 사용시 nil로 처리 되기 때문에 처리가 바르게 일어나지않음(ex. 1ab입력시 num = [1,nil,nil] -> 중복으로 처리됨
               num.count == 3
         else {
             print("올바르지 않은 입력값입니다.")
