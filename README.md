@@ -5,7 +5,7 @@
 
 ## 1. BaseballGame 타입 선택
 ### 1) Struct vs. Class
-처음에는 구조체로 구현했으나, 힌트를 계속해서 변경해나가야하는데 구조체는 그때마다 객체 자체를 다시 써야한다는 번거로움이 있습니다. 따라서 참조 타입인 클래스로 변경하였습니다.
+처음에는 구조체로 구현했으나, 내부 값을 계속해서 변경해나가야하는데 구조체는 그때마다 객체 자체를 다시 써야한다는 번거로움이 있습니다. (함수 앞에도 mutating 키워드를 계속 붙여줘야합니다.) 따라서 참조 타입인 클래스로 변경하였습니다.
 
 ### 2) hint 튜플
 `hint`는 스트라이크와 볼로만 구분됩니다.
@@ -31,3 +31,17 @@ func setAnswer() {
 중복 숫자가 있는 경우, 힌트를 통해 유저가 올바른 정답을 떠올리기 어렵기 때문에 힌트의 의미가 사라집니다.
 
 조건문을 추가하여 중복 숫자의 생성을 막아주었습니다.
+
+### 2) 추가 구현 - 에러 핸들링 오류
+유효하지 않은 값에 대한 오류를 여러번 다뤄야할 것 같아 에러 타입을 정의하였다.
+```swift
+enum GameError {
+    case invalidInput
+}
+```
+
+이후 함수 호출부에서 do-catch문으로 에러를 핸들링했으나 `GameError`에 정의된 에러 케이스를 모두 포함하였는데도 오류가 발생하였다.
+
+'Errors thrown from here are not handled because the enclosing catch is not exhaustive'
+
+<img width="2158" height="436" alt="Image" src="https://github.com/user-attachments/assets/601ca043-fd3b-4fad-892c-a2430b9ae121" />

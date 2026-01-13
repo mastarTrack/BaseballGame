@@ -20,8 +20,14 @@ class BaseballGame {
         
         // 정답을 맞힐 때까지 반복
         while !isCorrect {
-            getUserAnswer()
-            checkAnswer()
+            do {
+                try getUserAnswer()
+                checkAnswer()
+            } catch GameError.invalidInput {
+                print("유효하지 않은 입력입니다!")
+            } catch {
+                print("정의되지 않은 오류입니다.")
+            }
         }
     }
     
@@ -43,18 +49,23 @@ class BaseballGame {
     }
     
     // 유저 정답 입력 함수
-    func getUserAnswer() {
+    func getUserAnswer() throws {
         print("3자리 숫자를 입력해주세요. (예: 123)")
         
-        guard let input = readLine() else { return } // 유저 입력
-        let stringNum = input.replacingOccurrences(of: " ", with: "") // 공백 삭제
+        // 유저 입력
+        guard let input = readLine() else {
+            throw GameError.invalidInput
+        }
         
-        userAnswer = stringNum.compactMap{ Int(String($0)) } // 유저 입력 배열
+        // 공백 삭제
+        let stringNum = input.replacingOccurrences(of: " ", with: "")
+        
+        // 유저 입력 배열
+        userAnswer = stringNum.compactMap{ Int(String($0)) }
         
         // 유저 입력이 3자리 숫자가 아닐 경우의 예외 처리
         guard userAnswer.count == 3 else {
-            print("유효하지 않은 입력입니다!")
-            return
+            throw GameError.invalidInput
         }
     }
     
