@@ -10,13 +10,14 @@ func randomForBaseball() -> [Int]{
     var numbers = [1,2,3,4,5,6,7,8,9]
     var randomNumber: [Int] = []
     
-    for _ in 0...2{
+    randomNumber.append(numbers.remove(at: Int.random(in: 0..<numbers.count)))
+    numbers.append(0)
+    for _ in 0...1{
         randomNumber.append(numbers.remove(at: Int.random(in: 0..<numbers.count)))
     }
 
     return randomNumber
 }
-
 
 /// 입력된 값이 조건에 충족하는지 판별하기 위한 함수
 func checkInputData(_ numbers: String) throws -> [Int]{
