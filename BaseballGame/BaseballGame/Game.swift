@@ -122,11 +122,6 @@ class BaseballGame {
         // 유저 입력 배열
         userAnswer = stringNum.compactMap{ Int(String($0)) }
         
-        // 유저 입력이 3자리 숫자가 아닐 경우의 예외 처리
-        guard userAnswer.count == 3 else {
-            print("유효하지 않은 입력입니다!\n")
-            return
-        }
     }
     
     // 정답 & 유저 입력 비교 함수
@@ -136,7 +131,10 @@ class BaseballGame {
         hint.ball = 0
         
         // 유저 입력 정답 오류 시 무시
-        guard userAnswer.count == 3 else { return }
+        guard userAnswer.count == 3 else {
+            print("유효하지 않은 입력입니다!\n")
+            return
+        }
         
         // 힌트 설정(스트라이크, 볼)
         userAnswer.enumerated().forEach {
