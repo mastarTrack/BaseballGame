@@ -38,7 +38,7 @@ class BaseballGame {
     
     // 메뉴 선택 함수
     func selectMenu() -> Menu? {
-        print("\(SystemMessage.welcome)")
+        print(GameMessage.welcome)
         
 
         let condition = ["1", "2", "3"]
@@ -51,7 +51,7 @@ class BaseballGame {
         
         // 입력문 유효성 검사
         while !condition.contains(menu) {
-            print("\(SystemMessage.invalidInput) \(SystemMessage.selectMenuExample)")
+            print(GameMessage.invalidInput, GameMessage.selectMenuExample)
             input = readLine() ?? ""
             menu = input.replacingOccurrences(of: " ", with: "")
         }
@@ -70,7 +70,7 @@ class BaseballGame {
     
     //MARK: 게임 플레이 함수
     func play() {
-        print("\(SystemMessage.gameStart)")
+        print(GameMessage.startGame)
         gameRecord.append(0) // 게임 기록 생성
         setAnswer() // 정답 생성
         
@@ -108,7 +108,7 @@ class BaseballGame {
     
     // 유저 정답 입력 함수
     func getUserAnswer() {
-        print("\(SystemMessage.userAnswerExample)")
+        print(GameMessage.userAnswerExample)
         
         // 초기화
         userAnswer = []
@@ -121,9 +121,9 @@ class BaseballGame {
             userAnswer = input.compactMap{ Int(String($0)) }
             
             if userAnswer.count != 3 {
-                print("\(SystemMessage.invalidInput) \(SystemMessage.userAnswerExample)")
+                print(GameMessage.invalidInput, GameMessage.userAnswerExample)
             } else if Set(userAnswer).count != 3 {
-                print("\(SystemMessage.duplicateInput) \(SystemMessage.userAnswerExample)")
+                print(GameMessage.duplicateInput, GameMessage.userAnswerExample)
             } else {
                 isValid = true
             }
@@ -144,25 +144,25 @@ class BaseballGame {
         }
         
         // 힌트에 따른 분기 처리
-        print("\(SystemMessage.hint(strike: hint.strike, ball: hint.ball))")
+        print(GameMessage.getHint(for: hint.strike, hint.ball))
         if hint.strike == 3 { isCorrect = true }
     }
     
     //MARK: 게임 기록 조회 함수
     func record() {
-        print("❮게임 기록 보기❯\n")
+        print(GameMessage.recordTitle)
         
         // 게임 기록이 없을 경우
         guard !gameRecord.isEmpty else {
-            print("플레이한 게임 기록이 없습니다!\n")
+            print(GameMessage.noRecord)
             return
         }
 
         // 게임 기록 출력
         for i in 0..<gameRecord.count {
-            print("\(i + 1)번째 게임: 시도 횟수 - \(gameRecord[i])")
+            print(GameMessage.getRecord(for: i, attempt: gameRecord[i]))
         }
-        print("\n")
+        print("\n", terminator: "")
     }
     
     //MARK: 게임 종료 함수
@@ -171,7 +171,7 @@ class BaseballGame {
         gameRecord = []
         gameCount = 0
         
-        print("❮ 숫자 야구 게임을 종료합니다. ❯")
+        print(GameMessage.endGame)
         
     }
 }
