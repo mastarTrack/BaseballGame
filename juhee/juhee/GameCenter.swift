@@ -9,7 +9,6 @@ import Foundation
 
 class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
-    
     // 사용자가 입력한 값 검증
     func checkInput(_ inputNumber: Int) -> Bool {
         
@@ -33,20 +32,16 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         var strike = 0
         var ball = 0
         
+        let inputArray = splitNum(number) // 입력값을 쪼개서 세원소를 가진 배열로
         
-        let inputArray = splitNum(number)
-        
-        for (ansIdx, ansEle) in ansArray.enumerated(){
-            for (iptIdx, iptEle) in inputArray.enumerated() {
-                if ansEle == iptEle { // 두 값이 같을때
-                    if ansIdx == iptIdx { // 인덱스 값도 같을때
-                        strike += 1
-                    } else {
-                        ball += 1
-                    }
-                }
+        for i in 0..<3 {
+            if inputArray[i] == ansArray[i] {
+                strike += 1
+            } else if ansArray.contains(inputArray[i]) {
+                ball += 1
             }
         }
+        
         if (strike == 3 && ball == 0) {
             print("정답입니다!")
             return false

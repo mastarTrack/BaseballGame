@@ -11,9 +11,10 @@ public class BaseballGame { // 야구 게임 진행 클래스
     
     var recordManager = RecordManager() // 기록을 관리하는 인스턴스 생성
     var game = GameCenter() // 게임 연산 계산 인스턴스 생성
-    var nthTrial = 0
+//    var nthTrial = 0
     
     func start() {
+        
         while true {
             let answer = game.makeAnswer() // 정답 만드는 함수
             print("환영합니다! 원하시는 번호를 입력해주세요")
