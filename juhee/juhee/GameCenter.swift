@@ -11,10 +11,9 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
     // 사용자가 입력한 값 검증
     func checkInput(_ inputNumber: Int) -> Bool {
+        let arr = splitNum(inputNumber)
         
-        var arr = splitNum(inputNumber)
-        
-//        nthTrial += 1 // 정답 맞추기 위한 시도 횟수 1 증가
+        nthTrial += 1 // 정답 맞추기 위한 시도 횟수 1 증가
         
         if arr[0] != arr[1]
             && arr[1] != arr[2]
@@ -28,12 +27,13 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     }
     
     // 입력값과 정답을 계산하는 함수
-    func compareInput(_ number: Int, _ ansArray: Array<Int>) -> Bool {
+    func compareInput(_ number: Int, _ ansArray: Array<Int>) -> String {
         var strike = 0
         var ball = 0
         
         let inputArray = splitNum(number) // 입력값을 쪼개서 세원소를 가진 배열로
         
+        // strike,ball에 값 입력
         for i in 0..<3 {
             if inputArray[i] == ansArray[i] {
                 strike += 1
@@ -44,13 +44,13 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         
         if (strike == 3 && ball == 0) {
             print("정답입니다!")
-            return false
+            return "True"
         } else if (strike == 0 && ball == 0){
             print("Nothing")
-            return true
+            return "False"
         } else {
             print("\(strike)스트라이크 \(ball)볼\n ")
-            return true
+            return "False"
         }
         
     }
