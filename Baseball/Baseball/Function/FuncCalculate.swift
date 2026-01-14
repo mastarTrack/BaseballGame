@@ -43,7 +43,7 @@ func checkInputData(_ numbers: String) throws -> [Int]{
 }
 
 /// Strike, Bool 판별 함수
-func CheckStrikeAndBall(target: [Int], guess: [Int]) -> (Int,Int){
+func checkStrikeAndBall(target: [Int], guess: [Int]) -> (Int,Int){
     
     var strike = 0
     var bool = 0

@@ -7,13 +7,10 @@
 
 /// 유저 모델 클래스
 class User{
-    private var name: String
-    private var baseballNumber: [Int] = []
-    private var playCount: Int = 0
-    
-    init(name: String) {
-        self.name = name
-    }
+    /// 사용자 이름 변수
+    private var name: String = "Guest"
+    /// 사용자 게임 기록 딕셔너리 변수
+    private var records: [Int : Int] = [:]
     
     func setName(_ name: String){
         self.name = name
@@ -22,20 +19,15 @@ class User{
     func getName() -> String{
         name
     }
-    
-    func setNumber(_ number: [Int]){
-        self.baseballNumber = number
+
+    func getRecord()-> [Int:Int]{
+        records
     }
     
-    func getNumber()-> [Int]{
-        baseballNumber
+    func insertRecord(recordDic: [Int: Int]){
+        for data in recordDic{
+            records[data.key] = data.value
+        }
     }
     
-    func playGame(){
-        playCount += 1
-    }
-    
-    func getPlayCount()-> Int{
-        playCount
-    }
 }
