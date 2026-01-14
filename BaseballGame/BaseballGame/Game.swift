@@ -39,7 +39,6 @@ class BaseballGame {
     // 메뉴 선택 함수
     func selectMenu() -> Menu? {
         print(GameMessage.welcome)
-        
 
         let condition = ["1", "2", "3"]
         var menu = ""
