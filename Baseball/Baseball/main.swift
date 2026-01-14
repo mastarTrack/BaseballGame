@@ -7,5 +7,5 @@
 
 import Foundation
 
-print("Hello, World!")
-
+// 게임시작!
+startMainMenu()
