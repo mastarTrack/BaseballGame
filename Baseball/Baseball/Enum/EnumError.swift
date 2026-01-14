@@ -15,6 +15,7 @@ enum ErrorDuplicate: Error{
     case InvalidNumberCount
 }
 
+/// 입력값 에러 처리 열거형
 enum ErrorInput: Error{
     /// 숫자외의 값이 입력되었음
     case IsNotNumber
