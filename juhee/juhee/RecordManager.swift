@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RecordManager {
+public class RecordManager { // 기록 관리 클래스
     var trialCounts: Array<Int> = [] // 시도 횟수 저장할 빈 배열
 
     func add(_ trialcount: Int){
