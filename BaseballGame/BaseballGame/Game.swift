@@ -38,11 +38,9 @@ class BaseballGame {
     
     // 메뉴 선택 함수
     func selectMenu() -> Menu? {
-        print("""
-            환영합니다! 원하시는 번호를 입력해주세요. (예: 1)
-            1. 게임 시작하기  2. 게임 기록 보기  3. 종료하기
-            """)
+        print("\(SystemMessage.welcome)")
         
+
         let condition = ["1", "2", "3"]
         var menu = ""
         
@@ -53,17 +51,17 @@ class BaseballGame {
         
         // 입력문 유효성 검사
         while !condition.contains(menu) {
-            print("⚠️ 유효하지 않은 입력입니다. 다시 입력해주세요. (예: 1)")
+            print("\(SystemMessage.invalidInput) \(SystemMessage.selectMenuExample)")
             input = readLine() ?? ""
             menu = input.replacingOccurrences(of: " ", with: "")
         }
         
         switch menu {
-        case "1":
+        case Menu.play.rawValue:
             return .play
-        case "2":
+        case Menu.record.rawValue:
             return .record
-        case "3":
+        case Menu.exit.rawValue:
             return .exit
         default:
             return nil
@@ -72,7 +70,7 @@ class BaseballGame {
     
     //MARK: 게임 플레이 함수
     func play() {
-        print("\n❮ 게임을 시작합니다. ❯")
+        print("\(SystemMessage.gameStart)")
         gameRecord.append(0) // 게임 기록 생성
         setAnswer() // 정답 생성
         
@@ -105,12 +103,12 @@ class BaseballGame {
                 answer.append(num)
             }
         }
-//        print("정답: \(answer)") // - 디버깅용
+        debugPrint("정답: \(answer)")
     }
     
     // 유저 정답 입력 함수
     func getUserAnswer() {
-        print("3자리 숫자를 입력해주세요. (예: 123)")
+        print("\(SystemMessage.userAnswerExample)")
         
         // 초기화
         userAnswer = []
@@ -123,9 +121,9 @@ class BaseballGame {
             userAnswer = input.compactMap{ Int(String($0)) }
             
             if userAnswer.count != 3 {
-                print("⚠️ 유효하지 않은 입력입니다. 서로 다른 3개의 숫자를 입력해주세요.")
+                print("\(SystemMessage.invalidInput) \(SystemMessage.userAnswerExample)")
             } else if Set(userAnswer).count != 3 {
-                print("⚠️ 중복 숫자 입력입니다. 서로 다른 3개의 숫자를 입력해주세요.")
+                print("\(SystemMessage.duplicateInput) \(SystemMessage.userAnswerExample)")
             } else {
                 isValid = true
             }
@@ -136,7 +134,6 @@ class BaseballGame {
     func checkAnswer() {
         // 힌트 초기화
         var hint: (strike: Int, ball: Int) = (0, 0)
-        
         // 힌트 설정(스트라이크, 볼)
         userAnswer.enumerated().forEach {
             if answer[$0.offset] == $0.element {
@@ -147,14 +144,8 @@ class BaseballGame {
         }
         
         // 힌트에 따른 분기 처리
-        if hint.strike == 3 {
-            isCorrect = true
-            print("🎉 정답입니다!\n")
-        } else if hint.strike == 0 && hint.ball == 0 {
-            print("❌ Nothing\n")
-        } else {
-            print("🎯 \(hint.strike) 스트라이크 ⚾️ \(hint.ball) 볼 입니다!\n")
-        }
+        print("\(SystemMessage.hint(strike: hint.strike, ball: hint.ball))")
+        if hint.strike == 3 { isCorrect = true }
     }
     
     //MARK: 게임 기록 조회 함수
