@@ -9,11 +9,10 @@ import Foundation
 
 class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
+    
     // 사용자가 입력한 값 검증
     func checkInput(_ inputNumber: Int) -> Bool {
         let arr = splitNum(inputNumber)
-        
-        nthTrial += 1 // 정답 맞추기 위한 시도 횟수 1 증가
         
         if arr[0] != arr[1]
             && arr[1] != arr[2]
@@ -31,13 +30,13 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         var strike = 0
         var ball = 0
         
-        let inputArray = splitNum(number) // 입력값을 쪼개서 세원소를 가진 배열로
-        
-        // strike,ball에 값 입력
+        let inputArray = splitNum(number) // 입력값을 쪼개서 세 원소를 가진 배열로
+
+        // strike, ball에 값 입력
         for i in 0..<3 {
             if inputArray[i] == ansArray[i] {
                 strike += 1
-            } else if ansArray.contains(inputArray[i]) {
+            } else if ansArray.contains(inputArray[i]){
                 ball += 1
             }
         }
@@ -72,6 +71,8 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         }
         
         let answer: Array = [a, b, c]
+        print(answer)
+
         return answer
     }
     
@@ -79,7 +80,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     // 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 함수
     func splitNum(_ num: Int) -> [Int] {
         let a = num / 100
-        let b = num / 10
+        let b = num / 10 - a * 10
         let c = num % 10
         return [a, b, c]
     }

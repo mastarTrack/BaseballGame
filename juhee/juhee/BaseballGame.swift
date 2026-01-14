@@ -11,7 +11,7 @@ public class BaseballGame { // 야구 게임 진행 클래스
     
     var recordManager = RecordManager() // 기록을 관리하는 인스턴스 생성
     var game = GameCenter() // 게임 연산 계산 인스턴스 생성
-    var nthTrial = 0
+    var gameCounter = GameCounter(trial: 0)
     
     func start() {
         while true {
@@ -45,10 +45,12 @@ public class BaseballGame { // 야구 게임 진행 클래스
                     continue // 다시 입력하도록 while문 다시 실행
                 }
                 
+                gameCounter.trial += 1
+                
                 if game.compareInput(inputNumber, answer) == "True" {
                     // 정답이면 "True" 출력하고 반복문에서 빠져나감
-                    recordManager.add(nthTrial) // 배열에 시도 횟수 입력
-                    nthTrial = 0 // 시도 횟수 0으로 초기화
+                    recordManager.add(gameCounter.trial) // 배열에 시도 횟수 입력
+                    gameCounter.trial = 0 // 시도 횟수 0으로 초기화
                     break
                 }
             }
