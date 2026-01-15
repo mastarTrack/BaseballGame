@@ -36,7 +36,7 @@ func startBaseBall(_ playerGameCount: Int) -> [Int: Int]{
         sleep(1)
         print(GameMessages.inputNumber.rawValue)
         do {
-            userBallNum = try checkInputData(readLine()!)
+            userBallNum = try checkInputData(readLine())
             tryCount += 1
         }catch ErrorDuplicate.IsNotNumber{
             print(GameMessages.notNumber.rawValue)

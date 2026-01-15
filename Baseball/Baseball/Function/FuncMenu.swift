@@ -17,13 +17,13 @@ func startMainMenu(){
     
     print("사용자 정보를 확인하겠습니다.")
     print("사용자 아이디를 입력해주세요(영문권장)")
-    user.setName(readLine()!)
+    user.setName(readLine() ?? "")
     
     // 메인 메뉴 루프
     while playing {
         print(GameMessages.textMainMenu(user.getName()))
         do{
-            switch try checkInputNumber(readLine()!){
+            switch try checkInputNumber(readLine()){
             /// 야구게임 실행
             case 1:
                 user.insertRecord(recordDic: startBaseBall(user.getRecord().count))
@@ -50,14 +50,4 @@ func startMainMenu(){
     print(GameMessages.quitText.rawValue)
 }
 
-/// 입력된 값에 대한 확인 함수
-func checkInputNumber(_ input: String) throws ->  Int{
-    guard let number = Int(input) else {
-        throw ErrorInput.IsNotNumber
-    }
-    if !(1...3).contains(number){
-        throw ErrorInput.NotSpecifiedValue
-    }
-    
-    return number
-}
+

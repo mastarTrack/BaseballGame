@@ -6,7 +6,7 @@
 //
 import Foundation
 
-/// 기록 출룍 함수
+/// 기록 출력 함수
 func printRecord(records: [Int:Int]){
     // 게임 진행 기록이 없을 시 문구 출력
     if records.count == 0{
