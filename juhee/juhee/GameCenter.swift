@@ -12,11 +12,9 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
     // 사용자가 입력한 값 검증
     func checkInput(_ inputNumber: Int) -> Bool {
-        let arr = splitNum(inputNumber)
+        let set = Set(splitNum(inputNumber))
         
-        if arr[0] != arr[1]
-            && arr[1] != arr[2]
-            && arr[0] != arr[2]
+        if set.count == 3   // Array를 Set으로 변환하여 중복을 제외한 값이 3이어야 함
             && 99 < inputNumber
             && inputNumber < 1000 {
             return true
@@ -43,7 +41,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         
         if (strike == 3 && ball == 0) {
             print("정답입니다!")
-            return "True"
+            return "정답"
         } else if (strike == 0 && ball == 0){
             print("Nothing")
             return "False"
