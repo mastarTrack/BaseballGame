@@ -8,122 +8,91 @@
 import Foundation
 
 class BaseballGame {
-    var isExit = false
-    var isCorrect = false
+    // private 캡슐화
+    private var isExit = false
     
-    var answer: [Int] = []
-    var userAnswer: [Int] = []
-    
+    private let gameManager = BaseballGameManager()
+
+    // 굳이 변수가 여기 선언될 필요가 있는가. 1회성인데
     var gameRecord: [Int] = []
     var gameCount = 0
     
     //MARK: 게임 시작 함수
     func start() {
         isExit = false
-        while !isExit {
-            if let selected = selectMenu() {
-                // 입력 번호에 따른 함수 실행
-                switch selected {
-                case .play:
-                    play()
-                case .record:
-                    record()
-                case .exit:
-                    isExit = true
-                }
+        while !isExit, let selected = gameManager.selectMenu() {
+            // 입력 번호에 따른 함수 실행
+            switch selected {
+            case .play:
+                play()
+            case .record:
+                record()
+            case .exit:
+                isExit = true
             }
         }
         exit()
     }
-    
-    // 메뉴 선택 함수
-    func selectMenu() -> Menu? {
-        print(GameMessage.welcome)
 
-        let condition = ["1", "2", "3"]
-        var menu = inputWithNoSpace()
-        
-        // 입력문 유효성 검사
-        while !condition.contains(menu) {
-            print(GameMessage.invalidInput, GameMessage.selectMenuExample)
-            menu = inputWithNoSpace() // 입력값 공백 제거 함수 확장에 구현
-        }
-        return Menu(rawValue: menu)
-    }
-    
     //MARK: 게임 플레이 함수
     func play() {
         print(GameMessage.startGame)
+        
         gameRecord.append(0) // 게임 기록 생성
-        setAnswer() // 정답 생성
+        let answer = setAnswer() // 정답 생성
+        var isCorrect = false
+        debugPrint("정답: \(answer)")
         
         // 정답을 맞힐 때까지 반복
         while !isCorrect {
-            getUserAnswer()
-            checkAnswer()
+            let userAnswer = getUserAnswer()
+            let result = gameManager.checkAnswer(userAnswer, with: answer)
+            isCorrect = result.correct
+            print(printResult(result))
             gameRecord[gameCount] += 1 // 시도 횟수 증가
         }
         gameCount += 1 // 게임 횟수 증가
     }
     
     // 정답 생성 함수
-    func setAnswer() {
-        // 초기화
-        isCorrect = false
-        answer = []
+    func setAnswer() -> [Int] {
+//        var num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // 정답 숫자 후보
+//        num.shuffle() // 숫자 배열 섞기
+//        let answer = num[0] != 0 ? Array(num[0...2]) : Array(num[1...3]) // 첫 번째 숫자가 0일 경우 예외 처리
         
-        var num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // 정답 숫자 후보
-        num.shuffle() // 숫자 배열 섞기
-        answer = num[0] != 0 ? Array(num[0...2]) : Array(num[1...3]) // 첫 번째 숫자가 0일 경우 예외 처리
-        
-        debugPrint("정답: \(answer)")
+        return Array((0...9).shuffled() // 숫자 섞기
+            .trimmingPrefix(while: { $0 == 0 }) // while 조건에 맞는 첫 글자 삭제
+            .prefix(3))
+
     }
     
     // 유저 정답 입력 함수
-    func getUserAnswer() {
+    func getUserAnswer() -> [Int] {
         print(GameMessage.userAnswerExample)
         
-        // 초기화
-        userAnswer = []
-        var isValid = false
-
-        while !isValid {
+        while true {
             // 유저 입력
             let input = readLine() ?? ""
             // 유저 입력 배열
-            userAnswer = input.compactMap{ Int(String($0)) }
+            let userAnswer = input.compactMap{ Int(String($0)) }
             
-            if userAnswer.count != 3 {
+            if userAnswer.count != 3 { // 유저 입력이 3자리 숫자가 아닐 경우
                 print(GameMessage.invalidInput, GameMessage.userAnswerExample)
-            } else if Set(userAnswer).count != 3 {
+            } else if Set(userAnswer).count != 3 { // 유저 입력에 중복 숫자가 있을 경우
                 print(GameMessage.duplicateInput, GameMessage.userAnswerExample)
             } else {
-                isValid = true
+                return userAnswer
             }
         }
     }
     
-    // 정답 & 유저 입력 비교 함수
-    func checkAnswer() {
-        // 힌트 초기화
-        var hint: (strike: Int, ball: Int) = (0, 0)
-        // 힌트 설정(스트라이크, 볼)
-        for (i, element) in userAnswer.enumerated(){
-            if answer[i] == element {
-                hint.strike += 1
-            } else if answer.contains(element) {
-                hint.ball += 1
-            }
-        }
-        
-        // 힌트에 따른 분기 처리
-        if hint.strike == 3 {
-            isCorrect = true
-            print(GameMessage.correct)
-        } else if hint.strike == 0 && hint.ball == 0 {
-            print(GameMessage.nothing)
+    func printResult(_ result: (strike: Int, ball: Int, correct: Bool)) -> String {
+        if result.correct {
+            return GameMessage.correct
+        } else if result.strike == 0 && result.ball == 0 {
+            return GameMessage.nothing
         } else {
-            print(GameMessage.getHint(for: hint.strike, hint.ball))
+            return GameMessage.getHint(for: result.strike, result.ball)
         }
     }
     
@@ -149,16 +118,17 @@ class BaseballGame {
         // 게임 기록 초기화
         gameRecord = []
         gameCount = 0
-        
+
         print(GameMessage.endGame)
         
     }
 }
 
 //MARK: 부가 기능 구현부
+
 extension BaseballGame {
     // 입력값 공백 제거
-    func inputWithNoSpace() -> String {
+    @inlinable func inputWithNoSpace() -> String { // @Inlinable 하면 인라이닝해서 치환되는데.. 요거 별로 안쓰이는데 필요한가?
         var input = readLine() ?? ""
         input = input.trimmingCharacters(in: .whitespacesAndNewlines)
         return input
