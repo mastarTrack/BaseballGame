@@ -53,25 +53,15 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     }
     
     // 정답 만드는 함수
-    // 1에서 9까지의 서로 다른 임의의 정답인 수 3개를 정하기 (abc)
     func makeAnswer() -> Array<Int> {
-                
-        let a = Int.random(in: (1...9))
-        
-        var b = Int.random(in: 0...9)
-        while a == b {
-            b = Int.random(in: 0...9) // a와 b가 다를때까지 b에 랜덤한 Int값 대입
-        }
-        
-        var c = Int.random(in: 0...9)
-        while a == c || b == c {
-            c = Int.random(in: 0...9) // c가 a, b값과 다를때까지 c에 랜덤한 Int값 대입
-        }
-        
-        let answer: Array = [a, b, c]
-        print(answer)
+        var answerSet: Set<Int> = []
+        answerSet.insert(Int.random(in: 1...9)) // 일의 자리 수는 1부터 9까지
 
-        return answer
+        while answerSet.count < 3 { // Set을 이용한 중복없이 정답 생성
+            answerSet.insert(Int.random(in: 0...9))
+        }
+        let answerArray = Array(answerSet) // 순서없는 Set을 Array로 변경
+        return answerArray
     }
     
     
