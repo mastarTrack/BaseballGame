@@ -23,11 +23,12 @@ enum GameMessage {
     
     static let invalidInput = "⚠️ 유효하지 않은 입력입니다."
     static let duplicateInput = "⚠️ 중복 숫자 입력입니다."
+    
+    static let correct = "🎉 정답입니다! 🎉\n"
+    static let nothing = "❌ Nothing\n"
      
     static func getHint(for strike: Int, _ ball: Int) -> String {
-        return strike == 3 ? "🎉 정답입니다! 🎉\n"
-        : strike == 0 && ball == 0 ? "❌ Nothing\n" :
-        "🎯 \(strike) 스트라이크 ⚾️ \(ball) 볼 입니다!\n"
+        return "🎯 \(strike) 스트라이크 ⚾️ \(ball) 볼 입니다!\n"
     }
     
     static func getRecord(for game: Int, attempt: Int) -> String {

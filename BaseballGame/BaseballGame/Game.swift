@@ -41,30 +41,14 @@ class BaseballGame {
         print(GameMessage.welcome)
 
         let condition = ["1", "2", "3"]
-        var menu = ""
-        
-        // 메뉴 입력
-        var input = readLine() ?? ""
-        // 입력문 공백 삭제
-        menu = input.replacingOccurrences(of: " ", with: "")
+        var menu = inputWithNoSpace()
         
         // 입력문 유효성 검사
         while !condition.contains(menu) {
             print(GameMessage.invalidInput, GameMessage.selectMenuExample)
-            input = readLine() ?? ""
-            menu = input.replacingOccurrences(of: " ", with: "")
+            menu = inputWithNoSpace() // 입력값 공백 제거 함수 확장에 구현
         }
-        
-        switch menu {
-        case Menu.play.rawValue:
-            return .play
-        case Menu.record.rawValue:
-            return .record
-        case Menu.exit.rawValue:
-            return .exit
-        default:
-            return nil
-        }
+        return Menu(rawValue: menu)
     }
     
     //MARK: 게임 플레이 함수
@@ -88,20 +72,10 @@ class BaseballGame {
         isCorrect = false
         answer = []
         
-        for _ in 0...2 {
-            // 정답 첫 번째 숫자일 경우
-            if answer.isEmpty {
-                let num = Int.random(in: 1...9)
-                answer.append(num)
-            } else {
-                var num = Int.random(in: 0...9)
-                // 정답에 포함되어있다면 num 재생성
-                while answer.contains(num) {
-                    num = Int.random(in: 0...9)
-                }
-                answer.append(num)
-            }
-        }
+        var num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // 정답 숫자 후보
+        num.shuffle() // 숫자 배열 섞기
+        answer = num[0] != 0 ? Array(num[0...2]) : Array(num[1...3]) // 첫 번째 숫자가 0일 경우 예외 처리
+        
         debugPrint("정답: \(answer)")
     }
     
@@ -134,17 +108,23 @@ class BaseballGame {
         // 힌트 초기화
         var hint: (strike: Int, ball: Int) = (0, 0)
         // 힌트 설정(스트라이크, 볼)
-        userAnswer.enumerated().forEach {
-            if answer[$0.offset] == $0.element {
+        for (i, element) in userAnswer.enumerated(){
+            if answer[i] == element {
                 hint.strike += 1
-            } else if answer.contains($0.element) {
+            } else if answer.contains(element) {
                 hint.ball += 1
             }
         }
         
         // 힌트에 따른 분기 처리
-        print(GameMessage.getHint(for: hint.strike, hint.ball))
-        if hint.strike == 3 { isCorrect = true }
+        if hint.strike == 3 {
+            isCorrect = true
+            print(GameMessage.correct)
+        } else if hint.strike == 0 && hint.ball == 0 {
+            print(GameMessage.nothing)
+        } else {
+            print(GameMessage.getHint(for: hint.strike, hint.ball))
+        }
     }
     
     //MARK: 게임 기록 조회 함수
@@ -172,5 +152,15 @@ class BaseballGame {
         
         print(GameMessage.endGame)
         
+    }
+}
+
+//MARK: 부가 기능 구현부
+extension BaseballGame {
+    // 입력값 공백 제거
+    func inputWithNoSpace() -> String {
+        var input = readLine() ?? ""
+        input = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        return input
     }
 }
