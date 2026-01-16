@@ -9,8 +9,8 @@ import Foundation
 
 class GameCenter { // 게임에 필요한 계산을 하는 클래스
 
-    // 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 함수
-    func splitNum(_ num: Int) -> [Int] {
+    // 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 내부 로직 함수
+    private func splitNum(_ num: Int) -> [Int] {
         let a = num / 100
         let b = num / 10 - a * 10
         let c = num % 10

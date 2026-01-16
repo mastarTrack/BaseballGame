@@ -9,8 +9,8 @@ import Foundation
 
 public class BaseballGame { // 야구 게임 진행 클래스
     
-    var gameCenter = GameCenter() // 게임 연산 계산 인스턴스 생성
-    var recordManager = RecordManager() // 게임 기록을 관리하는 인스턴스 생성
+    private var gameCenter = GameCenter() // 게임 연산 계산 인스턴스 생성
+    private var recordManager = RecordManager() // 게임 기록을 관리하는 인스턴스 생성
 
     func start() {
         
