@@ -22,5 +22,6 @@ func printRecord(records: [Int:Int]){
     
     sleep(2)
     print(GameMessages.returnMenu.rawValue)
-    readLine()
+    // 리턴값을 사용하지 않을때 발생하는 경고 지우기
+    _ = readLine()
 }
