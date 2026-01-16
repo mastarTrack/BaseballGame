@@ -9,6 +9,7 @@ import Foundation
 
 class GameCenter { // 게임에 필요한 계산을 하는 클래스
 
+    
     // 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 내부 로직 함수
     private func splitNum(_ num: Int) -> [Int] {
         let a = num / 100
@@ -16,6 +17,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         let c = num % 10
         return [a, b, c]
     }
+    
     
     // 정답 만드는 함수
     func makeAnswer() -> Array<Int> {
@@ -35,6 +37,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         return answerArray
     }
     
+    
     // 사용자가 입력한 값 검증 함수
     func checkInput(_ inputNumber: Int) -> Bool {
         let set = Set(splitNum(inputNumber))
@@ -48,8 +51,16 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         }
     }
     
-    // 입력값과 정답을 비교하는 함수
-    func compareInpAns(_ number: Int, _ ansArray: Array<Int>) -> String {
+    
+    enum GameResult {
+        case correct
+        case nothing
+        case progress(strike: Int, ball: Int)
+    }
+    
+    
+    // 입력값과 정답을 비교해 힌트 계산하는 함수
+    func compareInpAns(_ number: Int, _ ansArray: [Int]) -> GameResult {
         var strike = 0
         var ball = 0
         let inputArray = splitNum(number) // 입력값을 쪼개서 세 원소를 가진 배열로
@@ -63,18 +74,12 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
             }
         }
         
-        if (strike == 3 && ball == 0) {
-            print("정답입니다!✔️\n")
-            return "collect"
+        if (strike == 3) {
+            return GameResult.correct
         } else if (strike == 0 && ball == 0){
-            print("Nothing 😵\n")
-            return "False"
+            return GameResult.nothing
         } else {
-            print("\(strike) 스트라이크  \(ball) 볼\n ")
-            return "False"
+            return GameResult.progress(strike: strike, ball: ball)
         }
-    
     }
-    
-
 }

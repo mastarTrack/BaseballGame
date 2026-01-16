@@ -35,27 +35,35 @@ public class BaseballGame { // 야구 게임 진행 클래스
         
         
         func playGame(){
+            
             let answer = gameCenter.makeAnswer() // 정답 만드는 함수 호출
             print(answer)
-            while true {
+            var isplay = true
+            while isplay { // 입력값 검사 반복문
                 print("숫자를 입력하세요:")
                 guard let inputNumber = readLine().flatMap(Int.init), // 올바른 입력값인지 검사
                       gameCenter.checkInput(inputNumber) // 입력값 검사 함수 호출
                 else {
                     print("올바르지 않은 입력값입니다.😤 다시 입력해주세요!\n")
-                    continue // 다시 재입력하도록 while문 다시 실행
+                    continue
                 }
                 
                 recordManager.addTrial() // 올바른 숫자를 입력하였으므로 시도횟수 +1
                 
-                if gameCenter.compareInpAns(inputNumber, answer) == "collect" {
+                let result = gameCenter.compareInpAns(inputNumber, answer)
+                
+                switch result {
+                case .correct:
+                    print("정답입니다!✔️\n")
                     recordManager.add(recordManager.trial) // 정답이므로 배열에 최종 시도 횟수 입력
                     recordManager.trial = 0 // 게임 시도 횟수 0으로 초기화
-                    break   // 입력값이 "collect"이면 반복문에서 빠져나감
+                    isplay = false
+                case .nothing:
+                    print("Nothing 😵\n")
+                case .progress(let s, let b):
+                    print("\(s) 스트라이크 \(b) 볼\n")
                 }
             }
         }
     }
-    
-
 }
