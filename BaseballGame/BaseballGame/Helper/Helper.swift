@@ -1,0 +1,23 @@
+//
+//  Error.swift
+//  BaseballGame
+//
+//  Created by 변예린 on 1/13/26.
+//
+
+import Foundation
+
+enum Menu: String {
+    case play = "1", record = "2", exit = "3"
+}
+
+enum InputResult: Equatable {
+    case invalid(for: Item)
+    case duplicate
+    case valid
+}
+
+enum Item {
+    case menu
+    case answer
+}
