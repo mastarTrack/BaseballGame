@@ -21,19 +21,17 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
     // 정답 만드는 함수
     func makeAnswer() -> Array<Int> {
-        var answerSet: Set<Int> = []
-        var answerArray: [Int] = []
-        
-        let first = Int.random(in: 1...9) // 백의 자리 수는 1부터 9까지
-        answerSet.insert(first)
-        answerArray.append(first)// 백의 자리 수 배열에 넣기 (먼저 안넣으면 백의자리에 0 가능해짐)
-        
-        while answerSet.count < 3 { // Set을 이용해 중복없이 정답 생성하도록 반복
-            answerSet.insert(Int.random(in: 0...9))
+        var answerArray: Array<Int> = []
+        answerArray.append(Int.random(in: 1...9)) // 백의 자리 수는 1부터 9까지
+
+        while answerArray.contains(answerArray[0]) {
+            answerArray.append(Int.random(in: 0...9))
         }
-        
-        answerSet.remove(first) // 백의자리 삭제
-        answerArray.append(contentsOf: Array(answerSet))
+
+        while answerArray.contains(answerArray[0]) || answerArray.contains(answerArray[1]) {
+            answerArray.append(Int.random(in: 0...9))
+        }
+
         return answerArray
     }
     
