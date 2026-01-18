@@ -10,7 +10,7 @@ import Foundation
 class GameCenter { // 게임에 필요한 계산을 하는 클래스
 
     
-    // 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 내부 로직 함수
+    // MARK: - 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 내부 로직 함수
     private func splitNum(_ num: Int) -> [Int] {
         let a = num / 100
         let b = num / 10 - a * 10
@@ -19,7 +19,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     }
     
     
-    // 정답 만드는 함수
+    // MARK: - 정답 만드는 함수
     func makeAnswer() -> Array<Int> {
         var answerArray: Array<Int> = []
         answerArray.append(Int.random(in: 1...9)) // 백의 자리 수는 1부터 9까지
@@ -36,7 +36,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     }
     
     
-    // 사용자가 입력한 값 검증 함수
+    // MARK: - 사용자가 입력한 값 검증 함수
     func checkInput(_ inputNumber: Int) -> Bool {
         let set = Set(splitNum(inputNumber))
         
@@ -50,6 +50,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     }
     
     
+    // MARK: - GameResult 구조체
     enum GameResult {
         case correct
         case nothing
@@ -57,7 +58,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     }
     
     
-    // 입력값과 정답을 비교해 힌트 계산하는 함수
+    // MARK: - 입력값과 정답을 비교해 힌트 계산하는 함수
     func compareInpAns(_ number: Int, _ ansArray: [Int]) -> GameResult {
         var strike = 0
         var ball = 0

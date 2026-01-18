@@ -12,6 +12,7 @@ public class BaseballGame { // 야구 게임 진행 클래스
     private var gameCenter = GameCenter() // 게임 연산 계산 인스턴스 생성
     private var recordManager = RecordManager() // 게임 기록을 관리하는 인스턴스 생성
 
+    //  MARK: - 게임 선택 함수
     func start() {
         
         while true {
@@ -34,6 +35,7 @@ public class BaseballGame { // 야구 게임 진행 클래스
         }
         
         
+        //  MARK: - 농구 게임 시작 함수
         func playGame(){
             
             let answer = gameCenter.makeAnswer() // 정답 만드는 함수 호출
