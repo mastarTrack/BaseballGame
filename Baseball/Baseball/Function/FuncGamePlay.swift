@@ -7,7 +7,7 @@
 import Foundation
 
 /// Baseball 게임 함수
-func startBaseBall(_ playerGameCount: Int) -> [Int: Int]{
+func startBaseBall(_ playerGameCount: Int) -> [Int: Int] {
     /// 컴퓨터 모델 변수 생성
     let gameManager = GameManager()
 

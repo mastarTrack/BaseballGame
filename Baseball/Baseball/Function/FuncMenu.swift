@@ -17,10 +17,10 @@ func startMainMenu(){
     
     print("사용자 정보를 확인하겠습니다.")
     print("사용자 아이디를 입력해주세요(영문권장)")
-    user.setName(readLine() ?? "")
+    user.name = readLine() ?? ""
     // 메인 메뉴 루프
     while playing {
-        print(GameMessages.textMainMenu(user.getName()))
+        print(GameMessages.textMainMenu(user.name))
         do{
             switch try checkInputNumber(readLine()){
             /// 야구게임 실행
