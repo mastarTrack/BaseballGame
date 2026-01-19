@@ -5,8 +5,8 @@
 
 ----------
 
-## 1. 프로젝트 소개
-### 1) 프로젝트 구조
+# 1. 프로젝트 소개
+## 1) 프로젝트 구조
 ```swift
 ├── Controller
 │   ├── GameController.swift // 게임 시스템 관리
@@ -35,18 +35,25 @@
 
 각 Controller와 View 객체는 만약 이 프로젝트가 커진다고 가정했을 때, 재사용성을 고려하면 프로젝트의 여러 곳에서 동일한 하나의 객체를 가리키게 하는 편이 낫지않을까 생각하여 클래스로 구현하였습니다.
 
-### 2) 설계 시 고려했던 부분
-**GameController 클래스**
-<img width="1044" height="856" alt="Image" src="https://github.com/user-attachments/assets/75f28f9a-7d6a-40ae-9d71-071db447a5ba" />
+## 2) 설계 시 고려했던 부분
+### 1️⃣ GameController 클래스
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/75f28f9a-7d6a-40ae-9d71-071db447a5ba"
+    width="50%"
+  />
+</p>
 
 게임의 전체적인 시스템을 관리하는 클래스입니다.
 
 각 기능을 담당하는 클래스에게 명령을 내려 핵심 기능을 수행하게 합니다.
 
-내부에서 다른 Controller 클래스들을 참조하기도 하고, 실제 개발 환경이었다면 `GameController`이라는 부모 클래스를 상속받아서 `BaseballGameController`이라는 클래스가 생성될 수도 있지 않을까 생각하여 클래스로 구현하였습니다.
+내부에서 다른 Controller 클래스들을 참조하기도 하고, 실제 개발 환경이었다면 `GameController`이라는 부모 클래스를 상속받아서 `BaseballGameController`이라는 클래스가 생성될 수도 있지 않을까 생각하여 클래스로 구현하였습니다.    
 
-- `selectMenu()`, `play()`, `showRecord()`, 
-: 메뉴를 선택하고 각 메뉴의 기능을 동작하는 함수입니다.
+<br><br>
+✏️ **`selectMenu()`, `play()`, `showRecord()`**
+
+메뉴를 선택하고 각 메뉴의 기능을 동작하는 함수입니다.
  
  GameController는 각 클래스들을 모아서 동작을 명령하고 게임을 주도하는 관리자같은 존재입니다.
  
@@ -55,9 +62,11 @@
  그때문에 메인 메뉴의 기능을 동작하는 함수를 GameController에서 선언하고, 함수 내부에서 기능을 구현하기 위해 각 클래스로의 동작을 명령합니다.
  
  즉, 해당 함수들은 클래스로의 일종의 동작 명령 모음인 셈입니다.
+ 
+<br><br>
+✏️ **`getUserAnswer() -> [Int]`**
 
-- `getUserAnswer() -> [Int]`
-: 처음에는 GameComputer내에 선언되었던 함수입니다.
+처음에는 GameComputer내에 선언되었던 함수입니다.
 
 하지만 GameComputer에서 함수가 동작하기 위해서는 GameComputer내에서 inputManager와 messagePrinter가 동작해야합니다.
 
@@ -68,13 +77,20 @@ GameController는 관리자로써 각 Controller 클래스를 연결해주는 �
 `getUserAnswer` 함수는 InputManager로부터 입력값을 받아 다른 클래스로 전달하기 위해 사용됩니다.
 
 따라서 이는 GameController가 담당할 기능이라 생각하여 해당 클래스 내에 구현하게 되었습니다.
- 
-**GameComputer 클래스**
- <img width="1044" height="496" alt="Image" src="https://github.com/user-attachments/assets/32f044aa-4d6a-4dc9-b198-29091f115055" />
- 
+
+<br><br>
+### 2️⃣ GameComputer 클래스
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/32f044aa-4d6a-4dc9-b198-29091f115055"
+    width="50%"
+  />
+</p>
+
  게임 관련 연산을 담당하는 클래스입니다.
  
-- `setAnswer() -> [Int]`
+<br><br>
+✏️ **`setAnswer() -> [Int]`**
 
 처음에는 for문을 활용해 정답을 생성하였습니다.
 
@@ -121,15 +137,21 @@ func setAnswer() {
 
 `trimmingPrefix(while:)`을 활용하여 `(0...9).shuffled()`의 첫 요소가 0일 경우 0을 잘라내고 첫 3개의 요소를 바로 반환하도록 하였습니다.
 
- 
-**RecordManager 클래스**
-<img width="4244" height="1656" alt="Image" src="https://github.com/user-attachments/assets/3161f93e-bc3e-4b6a-b6e6-aafc91188f64" />
+<br><br> 
+### 3️⃣ RecordManager 클래스
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/4c9b8c04-d41a-4c47-a3e9-db210511f1da"
+    width="50%"
+  />
+</p>
 
 게임 기록을 관리하는 클래스로, 싱글톤 패턴을 사용해보았습니다.
 
 게임 기록은 야구 게임 내에서 유일한 기록입니다. 따라서 해당 기록을 변경시키는 존재 또한 유일해야한다고 판단하여 싱글톤 패턴을 적용해보았습니다.
 
-**Record 클래스**
+<br><br>
+### 4️⃣ Record 클래스
 
 게임 기록 그 자체를 의미하는 클래스입니다.
 
@@ -144,10 +166,13 @@ RecordManager와 같은 이유로, 생성된 **하나의** 게임 기록이 지�
 이후 특정 게임 기록이 필요하더라도, key값이 단순 숫자인 이상 인덱스로 값을 불러오는 배열과 딕셔너리가 기능 면에서 차이가 없을거라 생각했습니다.
 
 오히려 배열이 key의 hash 값을 찾을 필요가 없기 때문에 성능면에서도 우위가 있으리라 판단하여 배열을 사용했습니다.
+<br><br>
 
-## 2. 트러블 슈팅
-### 1) 필수 구현 1번
-#### ⚠️ 문제: 중복 숫자가 포함되는 정답 생성
+----------
+
+# 2. 트러블 슈팅
+## 1) 필수 구현 1번
+### ⚠️ 문제: 중복 숫자가 포함되는 정답 생성
 ```swift
 func setAnswer() {
     for _ in 0...2 {
@@ -157,12 +182,14 @@ func setAnswer() {
 ```
 → 중복 여부를 확인하지 않고 랜덤 숫자를 생성하고 있음
 
-#### ❗️ 원인: 중복 생성 방지 코드의 부재
+<br><br>
+### ❗️ 원인: 중복 생성 방지 코드의 부재
 문제 요구사항을 정독하지 않아 중복 숫자 생성을 막는 코드를 작성하지 못했습니다.
 
 중복 숫자가 있는 경우, 힌트를 통해 유저가 올바른 정답을 떠올리기 어렵기 때문에 힌트의 의미가 사라집니다.
 
-#### ✅ 해결: 조건문 추가
+<br><br>
+### ✅ 해결: 조건문 추가
 ```swift
 while answer.contains(num) {
     num = Int.random(in: 0...9)
@@ -172,8 +199,9 @@ answer.append(num)
 
 조건문을 추가하여 중복 숫자의 생성을 막아주었습니다.
 
-### 2) 추가 구현
-#### ⚠️ 문제: 에러 핸들링 오류
+<br><br>
+## 2) 추가 구현 - 1
+### ⚠️ 문제: 에러 핸들링 오류
 유효하지 않은 값에 대한 오류를 여러번 다뤄야할 것 같아 에러 타입을 정의하였습니다.
 
 ```swift
@@ -188,13 +216,15 @@ enum GameError {
 
 <img width="2158" height="436" alt="Image" src="https://github.com/user-attachments/assets/601ca043-fd3b-4fad-892c-a2430b9ae121" />
 
-#### ❗️ 원인: default 에러 핸들링 코드의 부재
+<br><br>
+### ❗️ 원인: default 에러 핸들링 코드의 부재
 
 찾아보니 스위프트는 `throws`가 포함된 함수라면 '에러'를 던진다는 사실만 알지, 정확히 어떠한 에러를 던질지는 알 수 없다고 합니다.
 
 따라서 제가 던졌던 `GameError`뿐만 아니라 (가능성은 매우 낮으나) 던져질 수 있는 정의되지 않은 다른 에러에 대해서도 처리를 해주어야 한다고 합니다.
 
-#### ✅ 해결: default 핸들링 코드 작성
+<br><br>
+### ✅ 해결: default 핸들링 코드 작성
 
 ```swift
 do {
@@ -208,8 +238,9 @@ do {
 
 default catch문을 작성해줌으로써 해결하였습니다.
 
-### 3) 추가 구현
-#### ⚠️ 문제: 가변 문자열의 열거형 케이스 구현 어려움
+<br><br>
+## 3) 추가 구현 - 2
+### ⚠️ 문제: 가변 문자열의 열거형 케이스 구현 어려움
 
 기존 직접 입력하여 출력하던 문자열들을 열거형 타입 하나로 묶어 열거형을 호출해 출력하는 방식으로 리팩토링을 시도했습니다.
 ```swift
@@ -233,7 +264,8 @@ if hint.strike == 3 {
 }
 ```
 
-#### ❗️ 원인: 열거형의 문자열 원시값 정의
+<br><br>
+### ❗️ 원인: 열거형의 문자열 원시값 정의
 
 `GameMessage` 케이스 별로 다른 연관값을 주어 해결하고자 했지만, 그 경우에는 외부에서 열거형 객체를 생성해주어야한다는 단점이 있었습니다.
 
@@ -269,7 +301,8 @@ print(m.toString()) // "n 스트라이크 n 볼 입니다" 출력
 
 위처럼 구현하면 돌아가기는 하지만... 좀더 간결한 방법은 없을까 싶어 튜터님께 조언을 구했습니다.
 
-#### ✅ 해결 방법1: 확장과 프로토콜 활용하기
+<br><br>
+### ✅ 해결 방법1: 확장과 프로토콜 활용하기
 ```swift
 enum GameMessage {
     case welcome
@@ -298,7 +331,8 @@ extensionSystemMessage: CustomStringConvertible {
 print("\(GameMessage.welcome)") // "환영합니다!" 출력
 ```
 
-#### ✅ 해결 방법2: 타입 변수 활용하기
+<br><br>
+### ✅ 해결 방법2: 타입 변수 활용하기
 ```swift
 enum GameMessage {
     static var welcome = "환영합니다!"
