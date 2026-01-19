@@ -25,9 +25,7 @@ class GameController {
     
     // 게임 시작 함수
     func start() {
-        var isExit = false
-        
-        while !isExit {
+        while true {
             messagePrinter.welcome()
             let selected = selectMenu() // 메뉴 선택
             
@@ -42,7 +40,7 @@ class GameController {
             case .exit: // 게임 종료
                 recordManager.resetRecord()
                 messagePrinter.endGame()
-                isExit = true
+                exit(0)
             }
         }
     }

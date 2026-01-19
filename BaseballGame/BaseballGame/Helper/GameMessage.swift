@@ -28,7 +28,13 @@ enum GameMessage {
     static let nothing = "❌ Nothing\n"
      
     static func getHint(for strike: Int, _ ball: Int) -> String {
-        return "🎯 \(strike) 스트라이크 ⚾️ \(ball) 볼 입니다!\n"
+        if strike == 0 {
+            return "⚾️ \(ball) 볼 입니다!\n"
+        } else if ball == 0 {
+            return "🎯 \(strike) 스트라이크 입니다!\n"
+        } else {
+            return "🎯 \(strike) 스트라이크 ⚾️ \(ball) 볼 입니다!\n"
+        }
     }
     
     static func getRecord(for game: Int, attempt: Int) -> String {
