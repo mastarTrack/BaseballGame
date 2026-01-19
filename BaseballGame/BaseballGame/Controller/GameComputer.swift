@@ -7,7 +7,8 @@
 
 import Foundation
 
-class GameManager {
+// 게임과 관련된 연산을 담당하는 클래스입니다.
+class GameComputer {
     // 게임 정답 생성 함수
     func setAnswer() -> [Int] {
         return Array((0...9).shuffled() // 숫자 섞기

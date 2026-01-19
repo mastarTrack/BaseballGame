@@ -7,6 +7,7 @@
 
 import Foundation
 
+// GameMessage를 출력하는 클래스입니다.
 class MessagePrinter {
     func welcome() {
         print(GameMessage.welcome)
@@ -15,6 +16,7 @@ class MessagePrinter {
     
     func startGame() {
         print(GameMessage.startGame)
+        print(GameMessage.userAnswerExample)
     }
     
     func endGame() {
@@ -29,7 +31,7 @@ class MessagePrinter {
         print(GameMessage.noRecord)
     }
     
-    func error(_ error: InputResult) {
+    func error(_ error: InputError) {
         switch error {
         case .invalid(.menu):
             print(GameMessage.invalidInput, "\n")
@@ -41,8 +43,11 @@ class MessagePrinter {
         case .duplicate:
             print(GameMessage.duplicateInput, "\n")
             print(GameMessage.userAnswerExample)
-        case .valid: break
         }
+    }
+    
+    func unknownError() {
+        print(GameMessage.unknownError)
     }
     
     func result(_ result: CheckResult) {

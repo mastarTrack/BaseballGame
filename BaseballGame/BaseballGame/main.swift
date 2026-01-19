@@ -7,8 +7,8 @@
 let messagePrinter = MessagePrinter()
 let inputManager = InputManager()
 let recordManager = RecordManager.shared
-let gameManager = GameManager()
+let gameComputer = GameComputer()
 
-let game = BaseballGame(messagePrinter: messagePrinter, recordManager: recordManager, inputManager: inputManager, gameManager: gameManager)
+let game = GameController(messagePrinter: messagePrinter, recordManager: recordManager, inputManager: inputManager, gameComputer: gameComputer)
 
 game.start()

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 게임 기록을 관리하는 클래스입니다.
 class RecordManager {
     static let shared = RecordManager()
     private var record = Record()

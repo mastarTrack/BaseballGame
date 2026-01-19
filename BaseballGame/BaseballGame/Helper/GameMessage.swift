@@ -22,6 +22,7 @@ enum GameMessage {
     
     static let invalidInput = "⚠️ 유효하지 않은 입력입니다."
     static let duplicateInput = "⚠️ 중복 숫자 입력입니다."
+    static let unknownError = "⚠️ 알 수 없는 오류입니다."
     
     static let correct = "🎉 정답입니다! 🎉\n"
     static let nothing = "❌ Nothing\n"

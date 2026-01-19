@@ -21,3 +21,8 @@ enum Item {
     case menu
     case answer
 }
+
+enum InputError: Error {
+    case duplicate
+    case invalid(for: Item)
+}

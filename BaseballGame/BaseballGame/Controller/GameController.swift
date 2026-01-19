@@ -7,17 +7,20 @@
 
 import Foundation
 
-class BaseballGame {
+/* 게임의 시스템을 관리하는 클래스입니다.
+ 각 기능을 담당하는 클래스에게 명령을 내려 핵심 기능을 수행합니다. */
+
+class GameController {
     private let messagePrinter: MessagePrinter
     private let recordManager: RecordManager
     private let inputManager: InputManager
-    private let gameManager: GameManager
+    private let gameComputer: GameComputer
     
-    init(messagePrinter: MessagePrinter, recordManager: RecordManager, inputManager: InputManager, gameManager: GameManager) {
+    init(messagePrinter: MessagePrinter, recordManager: RecordManager, inputManager: InputManager, gameComputer: GameComputer) {
         self.messagePrinter = messagePrinter
         self.recordManager = recordManager
         self.inputManager = inputManager
-        self.gameManager = gameManager
+        self.gameComputer = gameComputer
     }
     
     // 게임 시작 함수
@@ -30,13 +33,13 @@ class BaseballGame {
             
             // 선택 메뉴에 따른 함수 실행
             switch selected {
-            case .play:
+            case .play: // 게임 시작
                 messagePrinter.startGame()
                 play()
-            case .record:
+            case .record: // 기록 조회
                 messagePrinter.showRecordTitle()
                 showRecord()
-            case .exit:
+            case .exit: // 게임 종료
                 recordManager.resetRecord()
                 messagePrinter.endGame()
                 isExit = true
@@ -47,13 +50,13 @@ class BaseballGame {
     // 메뉴 선택 함수
     private func selectMenu() -> Menu {
         while true {
-            // 유저 입력값
-            let input = inputManager.inputMenu()
-            
-            if let input = input {
-                return input // 유효한 입력값일 경우 Menu 타입 반환
-            } else {
-                messagePrinter.error(.invalid(for: .menu)) // 에러 메세지 출력
+            do {
+                let input = try inputManager.inputMenu() // 유저 입력값
+                return input // 유효할 경우
+            } catch InputError.invalid(for: .menu) {
+                messagePrinter.error(.invalid(for: .menu)) // 오류 메세지 출력
+            } catch {
+                messagePrinter.unknownError() // 알 수 없는 오류
             }
         }
     }
@@ -61,40 +64,42 @@ class BaseballGame {
     // 게임 플레이 함수
     private func play() {
         recordManager.addRound() // 게임 기록 생성
-        let answer = gameManager.setAnswer() // 정답 생성
+        let answer = gameComputer.setAnswer() // 정답 생성
         
         debugPrint(answer) // 디버깅용 정답 출력
         
         while true { // 정답을 맞힐 때까지 반복
-            let userAnswer = getUserAnswer()
+            let userAnswer = getUserAnswer() // 유저 정답 생성
             
-            let result = gameManager.check(userAnswer, with: answer)
-            messagePrinter.result(result)
+            // 정답 확인
+            let result = gameComputer.check(userAnswer, with: answer)
+            messagePrinter.result(result) // 결과 출력
             
+            // 기록 변경
             recordManager.addAttempt()
-            if result.correct { break }
+            if result.correct { break } // 정답 시 게임 종료
         }
     }
 
     // 유저 정답 생성 함수
     private func getUserAnswer() -> [Int] {
         while true {
-            let input = inputManager.inputUserAnswer() // 유저 입력값
-            let verification = inputManager.verify(input) // 유효성 검사
-
-            if verification == .valid {
-                return input // 정상 입력일 경우
-            } else if verification == .duplicate {
-                messagePrinter.error(.duplicate) // 유저 입력에 중복 숫자가 있을 경우
-            } else if verification == .invalid(for: .answer) {
-                messagePrinter.error(.invalid(for: .answer)) // 유저 입력이 3자리 숫자가 아닐 경우
+            do {
+                let input = try inputManager.inputUserAnswer()
+                return input
+            } catch InputError.duplicate {
+                messagePrinter.error(.duplicate)
+            } catch InputError.invalid(for: .answer) {
+                messagePrinter.error(.invalid(for: .answer))
+            } catch {
+                messagePrinter.unknownError()
             }
         }
     }
     
     // 기록 조회 함수
     private func showRecord() {
-        let record = recordManager.fetchRecord()
+        let record = recordManager.fetchRecord() // 기록 불러오기
         
         // 기록이 없는 경우
         if record.attempts.isEmpty {

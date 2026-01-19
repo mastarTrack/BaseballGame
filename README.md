@@ -3,113 +3,149 @@
 숫자 야구 게임은 컴퓨터가 생성한 중복 없는 숫자를 맞히는 콘솔 기반 게임입니다.  
 사용자는 숫자를 입력하고 **스트라이크 / 볼 / 아웃** 결과를 통해 정답을 추론합니다.
 
+----------
 
+## 1. 프로젝트 소개
+### 1) 프로젝트 구조
+```swift
+├── Controller
+│   ├── GameController.swift // 게임 시스템 관리
+│   ├── GameComputer.swift // 게임 연산 담당
+│   ├── InputManager.swift // 유저 입력 및 검증 담당
+│   └── RecordManager.swift // 기록 관리 담당
+├── Helper
+│   ├── GameMessage.swift // 게임 메세지 문자열
+│   └── Helper.swift // 부가적으로 필요한 열거형
+├── main.swift
+├── Model
+│   ├── CheckResult.swift // 정답 확인 결과 모델
+│   └── Record.swift // 게임 기록 모델
+└── View
+    └── MessagePrinter.swift // 게임 메세지 출력 담당
+```
 
+객체화를 진행하며 기능에 따라 객체들을 분리하다보니 MVC 패턴으로 구분지어봐도 될 것 같아 시도해보았습니다.
 
-## 1. BaseballGame 타입 선택
-### 1) Struct vs. Class
-처음에는 구조체로 구현했으나, 내부 값을 계속해서 변경해나가야하는데 구조체는 그때마다 객체 자체를 다시 써야한다는 번거로움이 있습니다. (함수 앞에도 mutating 키워드를 계속 붙여줘야합니다.) 따라서 참조 타입인 클래스로 변경하였습니다.
+- **Model** : 게임 내에서 데이터로 사용될 객체
+- **View** : 게임 UI 관련 객체
+- **Controller** : 게임 시스템 관련 동작 객체
+- **Helper** : 위 3가지 분류에 해당되지 않는 부가 객체
 
-### 2) hint 튜플
-`hint`는 스트라이크와 볼로만 구분됩니다.
-2개보다 더 많은 요소가 추가될 필요가 없고, 값에 이름을 붙여 직관적인 코드를 작성할 수 있다는 장점때문에 튜플을 선택하였습니다.
+위 기준으로 분리하였습니다.
 
-### 3) Menu 열거형
-`selectMenu()` 함수의 `menu`는 `input`에서 공백만 제거한 문자열입니다. 처음에는 `start`와 `selectMenu` 함수를 분리하지 않았기에 문자열 그대로 분기처리하여 메뉴별 함수를 호출하였습니다.
+각 Controller와 View 객체는 만약 이 프로젝트가 커진다고 가정했을 때, 재사용성을 고려하면 프로젝트의 여러 곳에서 동일한 하나의 객체를 가리키게 하는 편이 낫지않을까 생각하여 클래스로 구현하였습니다.
 
-(함수의 분리에 관한 내용은 2.2)에서 자세히 서술합니다.)
+### 2) 설계 시 고려했던 부분
+**GameController 클래스**
+<img width="1044" height="856" alt="Image" src="https://github.com/user-attachments/assets/75f28f9a-7d6a-40ae-9d71-071db447a5ba" />
+
+게임의 전체적인 시스템을 관리하는 클래스입니다.
+
+각 기능을 담당하는 클래스에게 명령을 내려 핵심 기능을 수행하게 합니다.
+
+내부에서 다른 Controller 클래스들을 참조하기도 하고, 실제 개발 환경이었다면 `GameController`이라는 부모 클래스를 상속받아서 `BaseballGameController`이라는 클래스가 생성될 수도 있지 않을까 생각하여 클래스로 구현하였습니다.
+
+- `selectMenu()`, `play()`, `showRecord()`, 
+: 메뉴를 선택하고 각 메뉴의 기능을 동작하는 함수입니다.
+ 
+ GameController는 각 클래스들을 모아서 동작을 명령하고 게임을 주도하는 관리자같은 존재입니다.
+ 
+ 따라서 게임 진행과 관련있는 기능들은 GameController 내에서 구현되어야 GameController가 게임을 주도할 수 있다고 생각했습니다.
+ 
+ 그때문에 메인 메뉴의 기능을 동작하는 함수를 GameController에서 선언하고, 함수 내부에서 기능을 구현하기 위해 각 클래스로의 동작을 명령합니다.
+ 
+ 즉, 해당 함수들은 클래스로의 일종의 동작 명령 모음인 셈입니다.
+
+- `getUserAnswer() -> [Int]`
+: 처음에는 GameComputer내에 선언되었던 함수입니다.
+
+하지만 GameComputer에서 함수가 동작하기 위해서는 GameComputer내에서 inputManager와 messagePrinter가 동작해야합니다.
+
+게다가 GameComputer는 연산만을 담당하는 클래스인데, 해당 동작은 연산이 아닌 유효한 유저 입력값을 반환하는 것이 목적이라 클래스의 기능과는 맞지 않다고 생각했습니다.
+
+GameController는 관리자로써 각 Controller 클래스를 연결해주는 중재자(매개체)로서의 기능도 하고있습니다.
+
+`getUserAnswer` 함수는 InputManager로부터 입력값을 받아 다른 클래스로 전달하기 위해 사용됩니다.
+
+따라서 이는 GameController가 담당할 기능이라 생각하여 해당 클래스 내에 구현하게 되었습니다.
+ 
+**GameComputer 클래스**
+ <img width="1044" height="496" alt="Image" src="https://github.com/user-attachments/assets/32f044aa-4d6a-4dc9-b198-29091f115055" />
+ 
+ 게임 관련 연산을 담당하는 클래스입니다.
+ 
+- `setAnswer() -> [Int]`
+
+처음에는 for문을 활용해 정답을 생성하였습니다.
 
 ```swift
-switch menu {
-case "1":
-    play()
-case "2":
-    record()
-case "3":
-    return
-default:
-    return
+func setAnswer() {
+    let answer = []
+
+    for _ in 0...2 {
+        // 정답 첫 번째 숫자일 경우
+        if answer.isEmpty {
+            let num = Int.random(in: 1...9)
+            answer.append(num)
+        } else {
+            var num = Int.random(in: 0...9)
+            // 정답에 포함되어있다면 num 재생성
+            while answer.contains(num) {
+                num = Int.random(in: 0...9)
+            }
+            answer.append(num)
+        }
+    }
 }
 ```
 
-그러나 두 함수의 분리로 `menu`를 `selectMenu` 내부가 아닌 외부 함수 `start`에서도 사용하게 되었습니다.
+이후 튜터님께서 `shuffle()` 메서드를 활용해볼 것을 제안하셔서 적용해보았습니다.
 
-`start`에서도 `menu`를 문자열 그대로 사용하여 분기처리할 경우 원하는 케이스 외에도 default를 정의해야 합니다. 게다가 열거형은 문자열보다 메모리를 덜 차지한다는 장점이 있으므로 여러 방면에서 열거형으로 사용하는 것이 적합하다고 생각하였습니다.
-
-```swift
-    func start() {
-        while !isExit {
-            ...
-            if let selected = selectedMenu {
-                // 입력 번호에 따른 함수 실행
-                switch selected {
-                case .play:
-                    play()
-                case .record:
-                    record()
-                case .exit:
-                    isExit = true
-                }
-            }
-        }
-        exit()
-    }
 ```
-### 4) gameRecord 배열
-`gameRecord`는 게임 기록을 출력하기 위해 저장하는 게임 기록 배열입니다.
+func setAnswer() {
+    ...
+    
+    var num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // 정답 숫자 후보
+    num.shuffle() // 숫자 배열 섞기
+    answer = num[0] != 0 ? Array(num[0...2]) : Array(num[1...3]) // 첫 번째 숫자가 0일 경우 예외 처리
+}
+```
 
-처음에는 `[Int: Int]` 형태의 딕셔너리로 구현하려했으나, key 값으로 쓰일 `gameCount`는 단순 숫자이므로 key로써의 의의가 떨어진다고 여겼습니다.
+`num` 배열을 생성하여 코드를 작성했는데, 생성하지 않고도 메서드를 활용해 바로 정답 배열을 만들 수 있다는 피드백을 들어 다시 수정하였습니다.
 
-특정 번째 게임의 기록을 랜덤하게 불러오는 것이 아니기 때문에 순서대로 값이 저장되는 배열이 게임 기록을 저장하기에 적합한 타입이라 생각했습니다.
+```func setAnswer() -> [Int] {
+    return Array((0...9).shuffled()
+            .trimmingPrefix(while: { $0 == 0 }).prefix(3)
+}
+```
+
+`trimmingPrefix(while:)`을 활용하여 `(0...9).shuffled()`의 첫 요소가 0일 경우 0을 잘라내고 첫 3개의 요소를 바로 반환하도록 하였습니다.
+
+ 
+**RecordManager 클래스**
+<img width="4244" height="1656" alt="Image" src="https://github.com/user-attachments/assets/3161f93e-bc3e-4b6a-b6e6-aafc91188f64" />
+
+게임 기록을 관리하는 클래스로, 싱글톤 패턴을 사용해보았습니다.
+
+게임 기록은 야구 게임 내에서 유일한 기록입니다. 따라서 해당 기록을 변경시키는 존재 또한 유일해야한다고 판단하여 싱글톤 패턴을 적용해보았습니다.
+
+**Record 클래스**
+
+게임 기록 그 자체를 의미하는 클래스입니다.
+
+RecordManager와 같은 이유로, 생성된 **하나의** 게임 기록이 지속해서 변화해야한다고 생각했으므로 게임 기록 모델인 `Record` 또한 클래스로 구현해보았습니다.
+
+클래스 내부의 `attempts`는 한 게임 라운드의 시도 횟수를 저장하는 배열입니다.
+
+처음에는 `round`와 `attempts`를 `[Int: Int]` 형태의 딕셔너리로 구현하려했으나, key 값으로 쓰일 `round`는 단순 숫자이므로 key로써의 의의가 떨어진다고 판단했습니다.
+
+특정 라운드의 기록을 랜덤하게 불러오는 것이 아니기 때문에 순서대로 값이 저장되는 배열이 게임 기록을 저장하기에 적합한 타입이라 생각했습니다.
 
 이후 특정 게임 기록이 필요하더라도, key값이 단순 숫자인 이상 인덱스로 값을 불러오는 배열과 딕셔너리가 기능 면에서 차이가 없을거라 생각했습니다.
 
 오히려 배열이 key의 hash 값을 찾을 필요가 없기 때문에 성능면에서도 우위가 있으리라 판단하여 배열을 사용했습니다.
 
-## 2. 함수의 분리
-### 1) `getUserAnswer()`와 `checkAnswer()`
-두 함수를 하나로 합쳐 구현할 수도 있었지만 (실제로 그렇게 구현하기도 했었지만) 유저의 정답을 얻는 것과 정답을 확인하는 것은 기능이 다르다고 생각하여 분리하였습니다.
-
-`play()` 함수에서 함수들을 호출하여 사용하므로 게임의 흐름이 잘 보일 수 있도록 기능을 구분하여 구현하는 것이 적합하다고 생각했습니다.
-
-### 2) `start()`와 `selectMenu()`
-앞선 1.3)에서 언급했듯 처음에는 `selectMenu` 함수 없이 `start` 함수에서 `menu` 문자열을 그대로 분기처리하여 switch문에서 각 메뉴에 맞는 함수를 바로 실행하도록 하였습니다.
-
-그러나 문제에서 각 메뉴가 실행된 후 '종료하기'를 제외하고는 실행 이후 **다시 메뉴 선택 화면이 나오도록 요구**하고 있습니다.
-
-이를 충족하기 위해서는 '메뉴 선택'과 '게임 프로그램 시작' 기능을 분리해야한다고 생각했습니다. (정확히는, '메뉴 선택' 기능이 모듈화 되어야한다고 생각했습니다.)
-
-```swift
-    func start() {
-        while !isExit {
-            ...
-                        
-            guard let selected = selectMenu() else {
-                print("유효하지 않은 입력입니다!")
-                return
-            }
-            
-            ...
-
-        }
-    }
-```
-
-따라서 `selectMenu` 함수를 분리하고 해당 함수를 통해 `menu`를 반환받아 `start`에서 분기처리하여 실행하는 방식으로 수정하였습니다.
-
-> **✏️ `selected` 처리 방식 수정**
->
-> guard문 → if문으로 수정하였습니다.
-> ```swift
-> if let selected = selectMenu() {
->   switch selected {
->   ...
->   }
->}
->```
-> `selectMenu` 함수 내부에서 이미 유효성 검사를 하고 값이 반환되기 때문에 예외 처리를 다시 하지 않고 `nil`값이면 함수를 종료하도록 하였습니다.
-
-## 3. 트러블 슈팅
+## 2. 트러블 슈팅
 ### 1) 필수 구현 1번
 #### ⚠️ 문제: 중복 숫자가 포함되는 정답 생성
 ```swift
@@ -171,16 +207,6 @@ do {
 ```
 
 default catch문을 작성해줌으로써 해결하였습니다.
-
-> **🧐 에러 타입이 지금 필요한가?**
->
->앞서 유효하지 않은 값에 대한 오류를 여러번 다뤄야할 것 같아 에러 타입을 정의했다고 언급했습니다.
->
->하지만 구현해나가다보니 생각보다 오류 케이스가 많지 않고(현재로써는 1개뿐), 그에 비해 default catch문을 포함한 do-catch문을 사용하기 위해 더 많은 코드가 작성된다고 여겨집니다.
->
->따라서 나중을 대비해 에러 타입 자체는 남겨두고 함수는 throws를 하지 않도록 변경하였습니다.
->
->예외 처리는 대부분 guard문을 통해 오류 내용을 출력하는 것으로 수정하였습니다.
 
 ### 3) 추가 구현
 #### ⚠️ 문제: 가변 문자열의 열거형 케이스 구현 어려움
