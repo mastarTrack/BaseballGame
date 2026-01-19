@@ -20,8 +20,8 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
     
     // MARK: - 정답 만드는 함수
-    func makeAnswer() -> Array<Int> {
-        var answerArray: Array<Int> = []
+    func makeAnswer() -> [Int] {
+        var answerArray: [Int] = []
         answerArray.append(Int.random(in: 1...9)) // 백의 자리 수는 1부터 9까지
 
         while answerArray.contains(answerArray[0]) {
