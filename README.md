@@ -37,7 +37,12 @@
 
 ### 2) 설계 시 고려했던 부분
 **GameController 클래스**
-<img width="1044" height="856" alt="Image" src="https://github.com/user-attachments/assets/75f28f9a-7d6a-40ae-9d71-071db447a5ba" />
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/75f28f9a-7d6a-40ae-9d71-071db447a5ba"
+    width="50%"
+  />
+</p>
 
 게임의 전체적인 시스템을 관리하는 클래스입니다.
 
@@ -70,8 +75,13 @@ GameController는 관리자로써 각 Controller 클래스를 연결해주는 �
 따라서 이는 GameController가 담당할 기능이라 생각하여 해당 클래스 내에 구현하게 되었습니다.
  
 **GameComputer 클래스**
- <img width="1044" height="496" alt="Image" src="https://github.com/user-attachments/assets/32f044aa-4d6a-4dc9-b198-29091f115055" />
- 
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/32f044aa-4d6a-4dc9-b198-29091f115055"
+    width="50%"
+  />
+</p>
+
  게임 관련 연산을 담당하는 클래스입니다.
  
 - `setAnswer() -> [Int]`
@@ -123,7 +133,12 @@ func setAnswer() {
 
  
 **RecordManager 클래스**
-<img width="4244" height="1656" alt="Image" src="https://github.com/user-attachments/assets/3161f93e-bc3e-4b6a-b6e6-aafc91188f64" />
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/3161f93e-bc3e-4b6a-b6e6-aafc91188f64"
+    width="50%"
+  />
+</p>
 
 게임 기록을 관리하는 클래스로, 싱글톤 패턴을 사용해보았습니다.
 
