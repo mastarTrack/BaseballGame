@@ -21,18 +21,15 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
     // MARK: - 정답 만드는 함수
     func makeAnswer() -> [Int] {
-        var answerArray: [Int] = []
-        answerArray.append(Int.random(in: 1...9)) // 백의 자리 수는 1부터 9까지
-
-        while answerArray.contains(answerArray[0]) {
-            answerArray.append(Int.random(in: 0...9))
+        let arr = (0...9).map { $0 }
+        
+        let shuffledArr = arr.shuffled() // 배열을 랜덤으로 섞어줌
+        
+        if shuffledArr[0] == 0 {
+            return [Int](shuffledArr[1...3]) // Int 배열로 형변환 필수
+        } else {
+            return [Int](shuffledArr[0...2])
         }
-
-        while answerArray.contains(answerArray[0]) || answerArray.contains(answerArray[1]) {
-            answerArray.append(Int.random(in: 0...9))
-        }
-
-        return answerArray
     }
     
     

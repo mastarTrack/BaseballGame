@@ -39,7 +39,6 @@ public class BaseballGame { // 야구 게임 진행 클래스
         func playGame(){
             
             let answer = gameCenter.makeAnswer() // 정답 만드는 함수 호출
-            print(answer)
             var isplay = true
             while isplay { // 입력값 검사 반복문
                 print("숫자를 입력하세요:")
