@@ -40,13 +40,9 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     func checkInput(_ inputNumber: Int) -> Bool {
         let set = Set(splitNum(inputNumber))
         
-        if set.count == 3   // Array를 Set으로 변환하여 중복을 제외한 값이 3이어야 함
+        return set.count == 3   // Array를 Set으로 변환하여 중복을 제외한 값이 3이어야 함
             && 99 < inputNumber
-            && inputNumber < 1000 {
-            return true
-        } else {
-            return false
-        }
+            && inputNumber < 1000
     }
     
     
