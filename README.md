@@ -33,18 +33,18 @@
 ## 프로젝트 구조
 Baseball&nbsp;
 ├── Enum&nbsp;
-│ ├── EnumError.swift&nbsp;
-│ └── EnumMessage.swift&nbsp;
+- ├── EnumError.swift&nbsp;
+- └── EnumMessage.swift&nbsp;
 │&nbsp;
 ├── Function&nbsp;
-│ ├── FuncGamePlay.swift&nbsp;
-│ ├── FuncMenu.swift&nbsp;
-│ ├── FuncUtils.swift&nbsp;
-│ └── FuncViewRecord.swift&nbsp;
+- ├── FuncGamePlay.swift&nbsp;
+- ├── FuncMenu.swift&nbsp;
+- ├── FuncUtils.swift&nbsp;
+- └── FuncViewRecord.swift&nbsp;
 │&nbsp;
 ├── Model&nbsp;
-│ ├── ModelGameManager.swift&nbsp;
-│ └── ModelUser.swift&nbsp;
+- ├── ModelGameManager.swift&nbsp;
+- └── ModelUser.swift&nbsp;
 │&nbsp;
 └── main.swift&nbsp;
 
