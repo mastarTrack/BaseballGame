@@ -12,8 +12,7 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
     
     // MARK: - 입력한 세자리 수를 숫자 각 한개씩으로 배열로 쪼개는 내부 로직 함수
     private func splitNum(_ num: Int) -> [Int] {
-        let result = String(num).compactMap{ Int(String($0))}
-            return result
+        return String(num).compactMap { $0.wholeNumberValue }
         }
         
         
@@ -50,16 +49,16 @@ class GameCenter { // 게임에 필요한 계산을 하는 클래스
         
         
         // MARK: - 입력값과 정답을 비교해 힌트 계산하는 함수
-        func compareInpAns(_ number: Int, _ ansArray: [Int]) -> GameResult {
+        func compare(input: Int, with answer: [Int]) -> GameResult {
             var strike = 0
             var ball = 0
-            let inputArray = splitNum(number) // 입력값을 쪼개서 세 원소를 가진 배열로
+            let inputArray = splitNum(input) // 입력값을 쪼개서 세 원소를 가진 배열로
             
             // strike, ball에 결과값 입력
             for i in 0..<gameNumber {
-                if inputArray[i] == ansArray[i] {
+                if inputArray[i] == answer[i] {
                     strike += 1
-                } else if ansArray.contains(inputArray[i]){
+                } else if answer.contains(inputArray[i]){
                     ball += 1
                 }
             }

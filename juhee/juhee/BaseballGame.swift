@@ -51,7 +51,7 @@ public class BaseballGame { // 야구 게임 진행 클래스
                 
                 recordManager.addTrial() // 올바른 숫자를 입력하였으므로 시도횟수 +1
                 
-                let result = gameCenter.compareInpAns(inputNumber, answer)
+                let result = gameCenter.compare(inputNumber, answer)
                 
                 switch result {
                 case .correct:
