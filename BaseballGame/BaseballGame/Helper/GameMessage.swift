@@ -1,17 +1,16 @@
 //
-//  Error.swift
+//  GameMessage.swift
 //  BaseballGame
 //
-//  Created by 변예린 on 1/13/26.
+//  Created by 변예린 on 1/15/26.
 //
 
 import Foundation
 
 enum GameMessage {
-    static let welcome = """
-                    환영합니다! 원하시는 번호를 입력해주세요. (예: 1)
-                    1. 게임 시작하기  2. 게임 기록 보기  3. 종료하기
-                    """
+    static let welcome = "환영합니다! 원하시는 메뉴를 입력해주세요. (예: 1)"
+    static let menu = "1. 게임 시작하기  2. 게임 기록 보기  3. 종료하기"
+    
     static let startGame = "\n❮ 게임을 시작합니다. ❯"
     static let endGame = "❮ 숫자 야구 게임을 종료합니다. ❯"
     
@@ -23,18 +22,22 @@ enum GameMessage {
     
     static let invalidInput = "⚠️ 유효하지 않은 입력입니다."
     static let duplicateInput = "⚠️ 중복 숫자 입력입니다."
+    static let unknownError = "⚠️ 알 수 없는 오류입니다."
+    
+    static let correct = "🎉 정답입니다! 🎉\n"
+    static let nothing = "❌ Nothing\n"
      
     static func getHint(for strike: Int, _ ball: Int) -> String {
-        return strike == 3 ? "🎉 정답입니다! 🎉\n"
-        : strike == 0 && ball == 0 ? "❌ Nothing\n" :
-        "🎯 \(strike) 스트라이크 ⚾️ \(ball) 볼 입니다!\n"
+        if strike == 0 {
+            return "⚾️ \(ball) 볼 입니다!\n"
+        } else if ball == 0 {
+            return "🎯 \(strike) 스트라이크 입니다!\n"
+        } else {
+            return "🎯 \(strike) 스트라이크 ⚾️ \(ball) 볼 입니다!\n"
+        }
     }
     
     static func getRecord(for game: Int, attempt: Int) -> String {
         return "\(game + 1)번째 게임: 시도 횟수 - \(attempt)"
     }
-}
-
-enum Menu: String {
-    case play = "1", record = "2", exit = "3"
 }
